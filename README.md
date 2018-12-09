@@ -1,7 +1,7 @@
 # Decipher Me
 
 <p align="center">
-    <img src=https://www.svgrepo.com/show/58398/sphinx.svg height=100px>
+        <img src=img/sphinx_logo.png height=100px>
 </p>
 
 Decipher Me is a free and open web framework to host Jeopardy-style Capture The
