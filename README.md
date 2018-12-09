@@ -1,4 +1,8 @@
-# decipher-me
+# Decipher Me
+
+<p align="center">
+    <img src=https://www.svgrepo.com/show/58398/sphinx.svg height=100px>
+</p>
 
 Decipher Me is a free and open web framework to host Jeopardy-style Capture The
 Flag contests.
@@ -19,6 +23,8 @@ TODO
 
 ### Running
 
+TODO
+
 ## Contributing
 
 TODO
@@ -27,3 +33,7 @@ TODO
 
 This project is licensed under the 
 [GNU General Public License v3.0](https://gitlab.com/enigmaster/decipher-me/blob/master/LICENSE)
+
+Sphinx image is licensed under 
+[Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/) by
+[SVG Repo](https://www.svgrepo.com)
