@@ -19,9 +19,42 @@ Forensic. More info [here](https://ctftime.org/ctf-wtf/).
 
 ### Requirements
 
-TODO
+- Python 3.x
 
-### Running
+### Setup
+
+First of all, create and activate a Python virtual environment:
+
+```shell
+$ python3 -m venv env
+$ source env/bin/activate
+```
+
+Then, install Django:
+
+```shell
+$ pip3 install django
+$ pip3 install django-generate-secret-key
+```
+
+Now, let's get a fresh `SECRET_KEY` for your instance.
+
+```shell
+$ cd decipher/
+$ ./manage.py generate_secret_key --replace
+```
+
+**Warning!** Don't replace your `SECRET_KEY` once the app is deployed, it can
+cause usability issues.
+
+Create the database and you are ready to run:
+
+```shell
+$ ./manage.py migrate
+$ ./manage.py runserver 0:8000
+```
+
+## Using
 
 TODO
 
