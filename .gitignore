@@ -1,5 +1,5 @@
 # Django secret key and database
-secretkey.txt
+decipher/secretkey.txt
 db.sqlite3
 
 # Byte-compiled / optimized / DLL files
