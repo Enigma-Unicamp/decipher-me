@@ -23,9 +23,11 @@ Forensic. More info [here](https://ctftime.org/ctf-wtf/).
 
 ### Setup
 
-First of all, create and activate a Python virtual environment:
+First of all, clone the repo, create and activate a Python virtual environment:
 
 ```shell
+$ git clone https://gitlab.com/enigmaster/decipher-me.git
+$ cd decipher-me/
 $ python3 -m venv env
 $ source env/bin/activate
 ```
