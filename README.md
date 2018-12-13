@@ -52,7 +52,7 @@ won't have to worry about accidentally pushing your key to your own Git
 repository.
 
 ```shell
-$ python3 scripts/generate_secret_key.py ../decipher/secretkey.txt
+$ python3 scripts/generate_secret_key.py decipher/secretkey.txt
 ```
 
 **Warning!** Don't replace your `SECRET_KEY` once the app is deployed, it can
@@ -61,6 +61,7 @@ cause usability issues.
 Create the database and you are ready to run:
 
 ```shell
+$ cd decipher/
 $ ./manage.py migrate
 $ ./manage.py runserver 0:8000
 ```
