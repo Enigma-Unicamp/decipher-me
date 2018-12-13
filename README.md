@@ -23,27 +23,36 @@ Forensic. More info [here](https://ctftime.org/ctf-wtf/).
 
 ### Setup
 
-First of all, clone the repo, create and activate a Python virtual environment:
+First of all, clone the repo and create a Python virtual environment. This way
+you won't have to install the dependencies in your system, only under the repo
+folder.
 
 ```shell
 $ git clone https://gitlab.com/enigmaster/decipher-me.git
 $ cd decipher-me/
 $ python3 -m venv env
+```
+
+Now, enter the Python virtual environment.
+
+```shell
 $ source env/bin/activate
 ```
 
-Then, install Django:
+Then, install Django, a Python framework to create and manage a webserver.
 
 ```shell
 $ pip3 install django
-$ pip3 install django-generate-secret-key
 ```
 
-Now, let's get a fresh `SECRET_KEY` for your instance.
+Now, we need to create a fresh `SECRET_KEY` for your instance, which will be
+saved in the file `decipher/secretkey.txt`. This key will be used by Django to
+perform a lot ot stuff.  Also, `secret.key` is covered by `.gitignore`, so you
+won't have to worry about accidentally pushing your key to your own Git
+repository.
 
 ```shell
-$ cd decipher/
-$ ./manage.py generate_secret_key --replace
+$ python3 scripts/generate_secret_key.py ../decipher/secretkey.txt
 ```
 
 **Warning!** Don't replace your `SECRET_KEY` once the app is deployed, it can
