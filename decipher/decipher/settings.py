@@ -23,8 +23,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 with open(os.path.join(BASE_DIR, 'secretkey.txt')) as secret_key_file:
     SECRET_KEY = secret_key_file.read().strip()
-    if SECRET_KEY == "REPLACETHISKEY!":
-        print("\nWARNING! You should replace the default secret key.\n")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django_generate_secret_key',
     'django.contrib.staticfiles',
 ]
 
