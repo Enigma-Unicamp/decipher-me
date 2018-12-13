@@ -39,7 +39,8 @@ Now, enter the Python virtual environment.
 $ source env/bin/activate
 ```
 
-Then, install Django, a Python framework to create and manage a webserver.
+Then, install [Django](https://www.djangoproject.com/), a Python framework to
+create and manage a webserver.
 
 ```shell
 $ pip3 install django
@@ -47,7 +48,9 @@ $ pip3 install django
 
 Now, we need to create a fresh `SECRET_KEY` for your instance, which will be
 saved in the file `decipher/secretkey.txt`. This key will be used by Django to
-perform a lot ot stuff.  Also, `secret.key` is covered by `.gitignore`, so you
+perform a
+[lot ot stuff](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY).
+Also, `secret.key` is covered by `.gitignore`, so you
 won't have to worry about accidentally pushing your key to your own Git
 repository.
 
@@ -59,7 +62,7 @@ $ python3 scripts/generate_secret_key.py decipher/secretkey.txt
 cause usability issues.
 
 Create the database and you are ready to run:
-
+
 ```shell
 $ cd decipher/
 $ ./manage.py migrate
@@ -76,9 +79,9 @@ TODO
 
 ## License
 
-This project is licensed under the 
+This project is licensed under the
 [GNU General Public License v3.0](https://gitlab.com/enigmaster/decipher-me/blob/master/LICENSE)
 
-Sphinx image is licensed under 
+Sphinx image is licensed under
 [Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/) by
 [SVG Repo](https://www.svgrepo.com)
