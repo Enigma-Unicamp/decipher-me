@@ -1,0 +1,38 @@
+{% extends 'challenge/base.html' %}
+
+{% block title %}
+  Rules
+{% endblock %}
+
+{% block content %}
+
+  <h4> Rules </h4>
+
+  <li style="margin:10px">
+    Anyone can take part in the challenge.
+  </li>
+
+  <li style="margin:10px">
+    The challenge starts at ... and ends at ...
+  </li>
+
+  <li style="margin:10px">
+    In each challenge, you must find a <i>flag</i>. It will be
+    something like <code>decipher{ABCDE1234}</code>
+  </li>
+
+  <li style="margin:10px">
+    Don't try to user brute force to find the correct flag. It will make our service
+    busy. Also, our flags are made in a way that the challenge will be
+    over when you find one of them using brute force.
+  </li>
+
+  <li style="margin:10px">
+    The organization is allowed to declassify any user, if it's necessary.
+  </li>
+
+  <li style="margin:10px">
+    Play fair and have fun!
+  </li>
+
+{% endblock %}

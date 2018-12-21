@@ -1,3 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+
+# Our personalized decipher challenge user model. We could use the default
+# Django user model, but then it wouldn't be possible to add attributes to it
+class User(AbstractUser):
+    pass

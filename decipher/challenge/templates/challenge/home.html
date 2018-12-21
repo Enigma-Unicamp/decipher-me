@@ -1,0 +1,13 @@
+{% extends 'challenge/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+    <h4 style="margin bottom=30pt">
+      Welcome, {{request.user.first_name|title }}
+    </h4>
+
+    <h6>
+      Don't forget to check our rules page!
+    </h6>
+
+{% endblock %}
