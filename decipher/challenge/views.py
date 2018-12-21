@@ -56,11 +56,9 @@ class RegisterView(TemplateView):
                 password=form.cleaned_data['password'],
                 first_name=form.cleaned_data['first_name'],
                 email=form.cleaned_data['email'],
-                university=form.cleaned_data['university'],
             )
             # Redirect new user to login page
-            #return redirect('d2018:login')
-            return
+            return redirect('challenge:login')
 
         # Otherwise render register page again
         return render(request, self.template_name, {'form': form})

@@ -9,14 +9,20 @@
   <h4>Login</h4>
 
   <form action="{% url 'challenge:login' %}" method="post">
+
+    <!-- Login form fields -->
     {% csrf_token %}
     {% for field in form %}
       {{ field.label_tag | title }}<br />
       {{ field }}<br />
     {% endfor %}
+
+    <!-- Buttons: confirm login or register account -->
     <input type="submit" value="Enter" class="btn" />
-    <a class="btn" href="{% url 'password_reset' %}">Forgot your password?</a>
-    <a style="float:right;" class="btn" href="{% url 'd2018:register' %}">Register</a>
+    <a class="btn" href="{% url 'challenge:register' %}">
+      <b>Register</b>
+    </a>
+
   </form>
 
 {% endblock %}

@@ -19,16 +19,10 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.ModelForm):
-    '''
-    Formulário de Cadastro dos usuários
-    @model: baseado no modelo de usuário
-    @fields: campos que serão usados
-    @labels: labels
-    @helptext: texto de ajuda
-    '''
+
     confirm_password=forms.CharField(
-        label='confirme a senha',
-        help_text='confirme a senha',
+        label='confirm password',
+        help_text='confirm your password',
         widget=forms.PasswordInput())
 
     class Meta:
@@ -41,18 +35,18 @@ class RegisterForm(forms.ModelForm):
             'password',
         ]
         help_texts = {
-            'first_name': 'primeiro nome',
-            'last_name': 'sobrenome',
-            'email': 'e-mail',
-            'username': 'usuário',
-            'password': 'senha',
+            'first_name': 'first name',
+            'last_name': 'last name',
+            'email': 'email',
+            'username': 'username',
+            'password': 'password',
         }
         labels = {
-            'first_name': 'primeiro nome',
-            'last_name': 'sobrenome',
-            'email': 'e-mail',
-            'username': 'usuário',
-            'password': 'senha',
+            'first_name': 'first name',
+            'last_name': 'last name',
+            'email': 'email',
+            'username': 'username',
+            'password': 'password',
         }
         widgets = {
             'password': forms.PasswordInput(),
