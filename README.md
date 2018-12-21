@@ -39,6 +39,12 @@ Now, enter the Python virtual environment.
 $ source env/bin/activate
 ```
 
+Next, upgrade pip
+
+```shell
+$ pip3 install --upgrade pip
+```
+
 Then, install [Django](https://www.djangoproject.com/), a Python framework to
 create and manage a webserver.
 
