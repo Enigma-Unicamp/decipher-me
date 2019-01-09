@@ -18,6 +18,13 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput)
 
 
+class ResetPasswordForm(forms.Form):
+
+    email = forms.EmailField(
+        label='email',
+        help_text='email')
+
+
 class RegisterForm(forms.ModelForm):
 
     confirm_password=forms.CharField(

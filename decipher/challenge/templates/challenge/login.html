@@ -6,7 +6,9 @@
 
 {% block content %}
 
-  <h4>Login</h4>
+  <h4 style="margin-bottom:30px">
+    Login
+  </h4>
 
   <form action="{% url 'challenge:login' %}" method="post">
 
@@ -17,10 +19,11 @@
       {{ field }}<br />
     {% endfor %}
 
-    <!-- Buttons: confirm login or register account -->
+    <!-- Buttons: confirm login -->
     <input type="submit" value="Enter" class="btn" />
-    <a class="btn" href="{% url 'challenge:register' %}">
-      <b>Register</b>
+
+    <a class="btn" href="{% url 'challenge:resetpassword' %}">
+      <b>Reset Password</b>
     </a>
 
   </form>

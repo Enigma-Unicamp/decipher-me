@@ -101,6 +101,18 @@ class LoginView(TemplateView):
         return redirect('challenge:login')
 
 
+class ResetPasswordView(TemplateView):
+
+    template_name = 'challenge/resetpassword.html'
+    form_class = forms.ResetPasswordForm
+
+    def get(self, request, *args, **kwargs):
+
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+
+
 class LogoutView(LoginRequiredMixin, View):
 
     # Logout user and redirect him to index
