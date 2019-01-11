@@ -6,6 +6,7 @@ from django import forms
 from .models import User
 
 
+
 class LoginForm(forms.Form):
 
     username = forms.CharField(
@@ -17,12 +18,6 @@ class LoginForm(forms.Form):
         max_length=20,
         widget=forms.PasswordInput)
 
-
-class ResetPasswordForm(forms.Form):
-
-    email = forms.EmailField(
-        label='email',
-        help_text='email')
 
 
 class RegisterForm(forms.ModelForm):

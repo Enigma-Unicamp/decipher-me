@@ -11,6 +11,7 @@ from . import forms
 from .models import User
 
 
+
 class IndexView(TemplateView):
 
     # Redirect to the home page
@@ -18,14 +19,17 @@ class IndexView(TemplateView):
         return redirect('challenge:home')
 
 
+
 class HomeView(TemplateView):
 
     template_name = 'challenge/home.html'
 
 
+
 class RulesView(TemplateView):
 
     template_name = 'challenge/rules.html'
+
 
 
 class RegisterView(TemplateView):
@@ -64,6 +68,7 @@ class RegisterView(TemplateView):
         return render(request, self.template_name, {'form': form})
 
 
+
 class LoginView(TemplateView):
 
     template_name = 'challenge/login.html'
@@ -99,17 +104,6 @@ class LoginView(TemplateView):
 
         # Otherwise show the login page again
         return redirect('challenge:login')
-
-
-class ResetPasswordView(TemplateView):
-
-    template_name = 'challenge/resetpassword.html'
-    form_class = forms.ResetPasswordForm
-
-    def get(self, request, *args, **kwargs):
-
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
 
 
 
