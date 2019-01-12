@@ -2,7 +2,22 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+
 # Our personalized decipher challenge user model. We could use the default
 # Django user model, but then it wouldn't be possible to add attributes to it
 class User(AbstractUser):
-    pass
+    # needed to unlock challenges or each user
+    level = models.PositiveIntegerField(default=0)
+    # needed by the ranking module
+    last_capture = models.DateTimeField(default=None, null=True, blank=True) 
+
+
+
+# Challenges model
+class Challenge(models.Model):
+    id_chall    = models.PositiveIntegerField(primary_key=True, unique=True)
+    type_chall  = models.CharField(max_length=20)
+    title       = models.CharField(max_length=200, unique=True)
+    flag        = models.CharField(max_length=200)
+    description = models.TextField()
+

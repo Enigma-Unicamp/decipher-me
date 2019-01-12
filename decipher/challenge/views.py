@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from . import forms
-from .models import User
+from .models import User, Challenge
 
 
 
@@ -23,6 +23,12 @@ class IndexView(TemplateView):
 class HomeView(TemplateView):
 
     template_name = 'challenge/home.html'
+
+    def get(self, request, *args, **kwargs):
+
+        challs = Challenge.objects.filter(id_chall__lte=request.user.level)
+        return render(request, self.template_name, { 'challenges' : challs })
+
 
 
 
