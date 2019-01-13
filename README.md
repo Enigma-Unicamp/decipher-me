@@ -77,33 +77,37 @@ $ ./manage.py runserver 0:8000
 
 ## Using
 
-To add your own challenges, go to `decipher/challenge/static/challenges_files`
-and create folders to each one of the challenges. We have a place holder called
-`Baby Steps` to examplify it. Inside the folder, you must create a file named
-`settings.csv`. Inside this file, you must add the following information
-(respecting this order):
+To add your own challenges, edit the file `scripts/settings.csv`. For each one
+of your challenges, you must add a new line like this:
 
 ```
-content_type,challenge_name,challenge_flag,challenge_description
+challenge_title,content_type,challenge_flag,challenge_description
 ```
 
+* `challenge_title` is the title of the challenge
 * `content_type` must be "download", "image", "link" or "page"
-* `challenge_name` is the name of the challenge
 * `challenge_flag` is the flag and must be in the following shape: `decipher{something}`
 * `challenge_description` is the challenge description
 
-For the `Baby Steps` example, we have:
+To examplify, we have two challenges (`Baby Steps` and `Test Challenge`), so our
+file stays like this:
 
 ```
-"download","Baby Steps","decipher{fl4g}","First challenge, named Baby Steps"
+"image","Baby Steps","decipher{f1rstfl4g}","First challenge, named Baby Steps"
+"download","Test Challenge","decipher{cr4z1fl4g}","Another challenge, just to examplify"
 ```
 
-Inside the same folder, we also add the downloadable file. If the `content_type`
-is a <b>image</b>, you should add the image file. If it's a <b>link</b>, you
-should add a .txt file containing the link. Finally, if it's a <b>page</b>, you
-should add the html file (and others that may be necessary).
+After that, go to `decipher/challenge/static/challenges_files` and create
+folders <b>with the same titles of each one of the challenges</b>.  In our
+example we have `Baby Steps` and `Test Challenge`. Inside this folders, we also
+add the content files. If the `content_type` is a <b>image</b> or a
+<b>downloadable file</b>, you should just drop it inside the folder. If it's a
+<b>link</b>, you should add a `.txt` file containing the link. Finally, if it's
+a <b>page</b>, you should add the `.html` file (and others that may be
+necessary). The name of those files doesn't matter to us, cause we'll rename
+them.
 
-After adding all the challenges, you must navigate to the folder
+After adding all the challenges, navigate to the folder
 `decipher-me/decipher` and run the following command:
 
 ```
