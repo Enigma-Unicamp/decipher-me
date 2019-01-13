@@ -21,8 +21,6 @@ for challenge_dir in challenges_dirs:
     other_file_path.remove("settings.csv")
     other_file_path = "challenges_files/" + challenge_dir + "/" + other_file_path[0]
 
-    print(other_file_path)
-
     # open settings file
     with open(settings_path, 'r') as settings_file:
 

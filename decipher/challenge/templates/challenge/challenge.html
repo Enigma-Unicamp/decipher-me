@@ -15,11 +15,15 @@
 
     {% if challenge.type_chall == 'download' %}
         <h6 style="margin-bottom:30pt">
-            <a href="{% static challenge.file_content %}" download>Download this file</a>
+            <a href="{% static challenge.file_content %}" download>Download needed file</a>
         </h6>
     {% elif challenge.type_chall == 'image' %}
         <h6 style="margin-bottom:30pt">
-            <a href="{% static challenge.file_content %}" image>Check this image</a>
+            <a href="{% static challenge.file_content %}" image>Image needed</a>
+        </h6>
+    {% elif challenge.type_chall == 'link' %}
+        <h6 style="margin-bottom:30pt">
+            <a href={{ link }}>Link to challenge</a>
         </h6>
     {% endif %}
 

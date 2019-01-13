@@ -28,8 +28,12 @@ class HomeView(TemplateView):
 
     def get(self, request, *args, **kwargs):
 
-        challs = Challenge.objects.filter(id_chall__lte=request.user.level)
-        return render(request, self.template_name, { 'challenges' : challs })
+        # if authenticated, pass the challenges to the template
+        if request.user.is_authenticated:
+            challs = Challenge.objects.filter(id_chall__lte=request.user.level)
+            return render(request, self.template_name, { 'challenges' : challs })
+        # otherwise, don't
+        return render(request, self.template_name)
 
 
 
@@ -43,11 +47,25 @@ class ChallengeView(LoginRequiredMixin, View):
             Challenge,
             id_chall=request.POST['id_chall']
             )
+
         # user is allowed or not to check the challenge
         if request.user.level < chall.id_chall:
             return redirect('challenge:index')
+
         # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
+
+            # 'link type challenge', so open the link file to pass the link to template
+            if chall.type_chall == 'link':
+                file_path = "challenge/static/" + chall.file_content
+                file_object = open(file_path, 'r')
+                link = file_object.read()
+                return render(
+                          request, self.template_name, 
+                          {'link' : link, 'challenge' : chall }
+                          )
+            
+            # other types of challenges
             return render(request, self.template_name, { 'challenge' : chall })
 
         # if it has the 'flag', check if it's correct
