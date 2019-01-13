@@ -93,8 +93,8 @@ To examplify, we have two challenges (`Baby Steps` and `Test Challenge`), so our
 file stays like this:
 
 ```
-"image","Baby Steps","decipher{f1rstfl4g}","First challenge, named Baby Steps"
-"download","Test Challenge","decipher{cr4z1fl4g}","Another challenge, just to examplify"
+"Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps"
+"Test Challenge","download","decipher{cr4z1fl4g}","Another challenge, just to examplify"
 ```
 
 After that, go to `decipher/challenge/static/challenges_files` and create
