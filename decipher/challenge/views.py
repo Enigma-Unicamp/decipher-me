@@ -28,7 +28,7 @@ class HomeView(TemplateView):
 
     def get(self, request, *args, **kwargs):
 
-        challs = Challenge.objects.all()
+        challs = Challenge.objects.filter(id_chall__lte=request.user.level)
         return render(request, self.template_name, { 'challenges' : challs })
 
 
@@ -43,32 +43,31 @@ class ChallengeView(LoginRequiredMixin, View):
             Challenge,
             id_chall=request.POST['id_chall']
             )
-        # checa se o usuário tem permissão para ver o desafio em questão
+        # user is allowed or not to check the challenge
         if request.user.level < chall.id_chall:
             return redirect('challenge:index')
-        # se nao tem 'flag' no post, a pessoa so quer ver a pagina do desafio
+        # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
             return render(request, self.template_name, { 'challenge' : chall })
 
-        # se tiver, validamos a flag
+        # if it has the 'flag', check if it's correct
         flag = request.POST['flag']
         hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
 
-        # objeto para verificar o formato regex da flag
-        pattern = re.compile("enigma{+[\x21-\x7E]+}$")
+        # pattern to verify regex
+        pattern = re.compile("decipher{+[\x21-\x7E]+}$")
 
-        # flag no formato 'enigma{flag}' e está correta
+        # flag is correct, so increase user level
         if (pattern.match(flag) and hash_flag == chall.flag):
             if request.user.level == chall.id_chall:
                 request.user.level += 1
                 request.user.last_capture = datetime.now()
                 request.user.save()
             return redirect('challenge:home')
-        # flag incorreta
+        # flag is incorret
         else:
             return render(
-                request,
-                'challenge/chall_{}.html'.format(chall.id_chall),
+                request, self.template_name,
                 {'wrong_flag' : True, 'challenge': chall}
                 )
 

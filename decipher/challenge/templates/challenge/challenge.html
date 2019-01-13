@@ -17,6 +17,10 @@
         <h6 style="margin-bottom:30pt">
             <a href="{% static challenge.file_content %}" download>Download this file</a>
         </h6>
+    {% elif challenge.type_chall == 'image' %}
+        <h6 style="margin-bottom:30pt">
+            <a href="{% static challenge.file_content %}" image>Check this image</a>
+        </h6>
     {% endif %}
 
 
@@ -33,7 +37,9 @@
     </form>
 
     {% if wrong_flag %}
-        <b> Wrong flag :( </b>
+        <div style="margin-top:20pt">
+            <b>Wrong flag :(</b>
+        </div>
     {% endif %}
 
 
