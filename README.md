@@ -97,6 +97,10 @@ file stays like this:
 "Test Challenge","download","decipher{cr4z1fl4g}","Another challenge, just to examplify"
 ```
 
+**Atention!** The order of the challenges in this file is the one that will be
+used.
+
+
 After that, go to `decipher/challenge/static/challenges_files` and create
 folders <b>with the same titles of each one of the challenges</b>.  In our
 example we have `Baby Steps` and `Test Challenge`. Inside this folders, we also
