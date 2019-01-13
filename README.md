@@ -77,7 +77,39 @@ $ ./manage.py runserver 0:8000
 
 ## Using
 
-TODO
+To add your own challenges, go to `decipher/challenge/static/challenges_files`
+and create folders to each one of the challenges. We have a place holder called
+`Baby Steps` to examplify it. Inside the folder, you must create a file named
+`settings.csv`. Inside this file, you must add the following information
+(respecting this order):
+
+```
+content_type,challenge_name,challenge_flag,challenge_description
+```
+
+* `content_type` must be "download", "image", "link" or "page"
+* `challenge_name` is the name of the challenge
+* `challenge_flag` is the flag and must be in the following shape: `decipher{something}`
+* `challenge_description` is the challenge description
+
+For the `Baby Steps` example, we have:
+
+```
+"download","Baby Steps","decipher{fl4g}","First challenge, named Baby Steps"
+```
+
+Inside the same folder, we also add the downloadable file. If the `content_type`
+is a <b>image</b>, you should add the image file. If it's a <b>link</b>, you
+should add a .txt file containing the link. Finally, if it's a <b>page</b>, you
+should add the html file (and others that may be necessary).
+
+After adding all the challenges, you must navigate to the folder
+`decipher-me/decipher` and run the following command:
+
+```
+python3 manage.py shell < scripts/create_challenges.py
+```
+
 
 ## Contributing
 
