@@ -2,15 +2,15 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-    <h4 style="margin-bottom:30pt">
-      Welcome, {{request.user.first_name|title }}
-    </h4>
-
     {% if request.user.is_authenticated %}
+
+        <h4 style="margin-bottom:30pt">
+            Welcome, {{request.user.first_name|title }}
+        </h4>
 
         {% if challenges %}
             {% for chall in challenges %}
-                <form action="chall/" method="post">
+                <form action="{% url 'challenge:challenge' %}" method="post">
                     {% csrf_token %}
                     {% if chall.id_chall >= user.level %}
                         <i class="material-icons" style="vertical-align: middle">lock</i>
@@ -27,7 +27,11 @@
         {% endif %}
 
     {% else %}
-        Please, login!
+
+        <h4 style="margin-bottom:30pt">
+            Welcome! Please login
+        </h4>
+
     {% endif %}
 
 

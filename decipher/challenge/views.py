@@ -10,6 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from . import forms
 from .models import User, Challenge
 
+from hashlib import sha256
+import re
 
 
 class IndexView(TemplateView):
@@ -26,9 +28,49 @@ class HomeView(TemplateView):
 
     def get(self, request, *args, **kwargs):
 
-        challs = Challenge.objects.filter(id_chall__lte=request.user.level)
+        challs = Challenge.objects.all()
         return render(request, self.template_name, { 'challenges' : challs })
 
+
+
+class ChallengeView(LoginRequiredMixin, View):
+
+    template_name = 'challenge/challenge.html'
+
+    def post(self, request, *args, **kwargs):
+
+        chall = get_object_or_404(
+            Challenge,
+            id_chall=request.POST['id_chall']
+            )
+        # checa se o usuário tem permissão para ver o desafio em questão
+        if request.user.level < chall.id_chall:
+            return redirect('challenge:index')
+        # se nao tem 'flag' no post, a pessoa so quer ver a pagina do desafio
+        if not "flag" in request.POST.keys():
+            return render(request, self.template_name, { 'challenge' : chall })
+
+        # se tiver, validamos a flag
+        flag = request.POST['flag']
+        hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
+
+        # objeto para verificar o formato regex da flag
+        pattern = re.compile("enigma{+[\x21-\x7E]+}$")
+
+        # flag no formato 'enigma{flag}' e está correta
+        if (pattern.match(flag) and hash_flag == chall.flag):
+            if request.user.level == chall.id_chall:
+                request.user.level += 1
+                request.user.last_capture = datetime.now()
+                request.user.save()
+            return redirect('challenge:home')
+        # flag incorreta
+        else:
+            return render(
+                request,
+                'challenge/chall_{}.html'.format(chall.id_chall),
+                {'wrong_flag' : True, 'challenge': chall}
+                )
 
 
 
@@ -56,7 +98,7 @@ class RegisterView(TemplateView):
 
     # Deal with register request
     def post(self, request):
-    
+
         form = self.form_class(request.POST)
 
         # If the form is valid create new user object
