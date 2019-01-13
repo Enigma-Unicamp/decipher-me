@@ -94,7 +94,7 @@ file stays like this:
 
 ```
 "Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps"
-"Test Challenge","download","decipher{cr4z1fl4g}","Another challenge, just to examplify"
+"Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify"
 ```
 
 **Atention!** The order of the challenges in this file is the one that will be
