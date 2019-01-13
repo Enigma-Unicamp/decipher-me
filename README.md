@@ -77,6 +77,25 @@ $ ./manage.py runserver 0:8000
 
 ## Using
 
+### Password recovery module
+
+First of all, create a new Gmail user. Then, navigate to
+`decipher-me/decipher/decipher/settings.py` and replace <b>EMAIL_HOST_USER</b>
+and <b>EMAIL_HOST_PASSWORD</b> with your new email info. Also, you could use
+another email provider, but then you'll have to change <b>EMAIL_HOST</b> and
+<b>EMAIL_PORT</b>.
+
+```
+# Email settings (needed by reset password module)
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'test@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_PORT = 587
+```
+
+### Adding your challenges
+
 To add your own challenges, edit the file `scripts/settings.csv`. For each one
 of your challenges, you must add a new line like this:
 
