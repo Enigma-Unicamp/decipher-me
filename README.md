@@ -94,6 +94,9 @@ EMAIL_HOST_PASSWORD = 'password'
 EMAIL_PORT = 587
 ```
 
+**Warning!** Don't push this file to any repository after setup the recovery
+module, because your email password would be stored unencrypted.
+
 ### Adding your challenges
 
 To add your own challenges, edit the file `scripts/settings.csv`. For each one
