@@ -36,7 +36,10 @@ $ python3 -m venv env
 Now, enter the Python virtual environment.
 
 ```shell
+$ # if using bash
 $ source env/bin/activate
+$ # if using fish
+$ . env/bin/activate.fish
 ```
 
 Next, upgrade pip
@@ -53,12 +56,10 @@ $ pip3 install django
 ```
 
 Now, we need to create a fresh `SECRET_KEY` for your instance, which will be
-saved in the file `decipher/secretkey.txt`. This key will be used by Django to
-perform a
-[lot ot stuff](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY).
-Also, `secret.key` is covered by `.gitignore`, so you
-won't have to worry about accidentally pushing your key to your own Git
-repository.
+saved in the file `decipher-me/decipher/secretkey.txt`. This key will be used by
+Django to perform a [lot ot stuff](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-SECRET_KEY).
+Also, `secret.key` is covered by `.gitignore`, so you won't have to worry about
+accidentally pushing your key to your own Git repository.
 
 ```shell
 $ python3 scripts/generate_secret_key.py decipher/secretkey.txt
@@ -68,7 +69,7 @@ $ python3 scripts/generate_secret_key.py decipher/secretkey.txt
 cause usability issues.
 
 Create the database and you are ready to run:
-
+
 ```shell
 $ cd decipher/
 $ ./manage.py migrate
@@ -76,6 +77,15 @@ $ ./manage.py runserver 0:8000
 ```
 
 ## Using
+
+### Sequential or non sequential challenges
+
+Sequential means that the second challenge will be unlocked only after the first
+one is complete. In no sequential mode, all challenges are unlocked.  By default,
+we have <b>non sequential challenges</b>. If you want to change that, simply
+edit `decipher-me/decipher/decipher/settings.py`, replacing
+`SEQUENTIAL_CHALLENGES = False` with `SEQUENTIAL_CHALLENGES = True`, if you want
+to have <b>sequential challenges</b>.
 
 ### Password recovery module
 
