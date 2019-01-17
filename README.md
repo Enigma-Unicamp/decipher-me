@@ -62,6 +62,7 @@ Also, `secret.key` is covered by `.gitignore`, so you won't have to worry about
 accidentally pushing your key to your own Git repository.
 
 ```shell
+$ cd decipher/
 $ python3 scripts/generate_secret_key.py decipher/secretkey.txt
 ```
 
@@ -71,7 +72,6 @@ cause usability issues.
 Create the database and you are ready to run:
 
 ```shell
-$ cd decipher/
 $ ./manage.py migrate
 $ ./manage.py runserver 0:8000
 ```
