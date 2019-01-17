@@ -87,6 +87,15 @@ edit `decipher-me/decipher/decipher/settings.py`, replacing
 `SEQUENTIAL_CHALLENGES = False` with `SEQUENTIAL_CHALLENGES = True`, if you want
 to have <b>sequential challenges</b>.
 
+After that, you'll have to navigate to `decipher-me/decipher` and enter the
+following commands, in order to remake the database.
+
+```
+$ rm db.sqlite3
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+```
+
 ### Password recovery module
 
 First of all, create a new Gmail user. Then, navigate to
@@ -146,9 +155,9 @@ After adding all the challenges, navigate to the folder
 `decipher-me/decipher` and run the following commands:
 
 ```
-rm db.sqlite3
-python3 migrate
-python3 manage.py shell < scripts/create_challenges.py
+$ rm db.sqlite3
+$ python3 migrate
+$ python3 manage.py shell < scripts/create_challenges.py
 ```
 
 
