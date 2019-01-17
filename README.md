@@ -63,7 +63,7 @@ accidentally pushing your key to your own Git repository.
 
 ```shell
 $ cd decipher/
-$ python3 scripts/generate_secret_key.py decipher/secretkey.txt
+$ python3 scripts/generate_secret_key.py secretkey.txt
 ```
 
 **Warning!** Don't replace your `SECRET_KEY` once the app is deployed, it can
