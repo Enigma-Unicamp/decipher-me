@@ -10,7 +10,7 @@
 
         {% if challenges %}
 
-            {% if sequential == 'True' %}
+            {% if sequential == True %}
                 {% for chall in challenges %}
                     <form action="{% url 'challenge:challenge' %}" method="post">
                         {% csrf_token %}
