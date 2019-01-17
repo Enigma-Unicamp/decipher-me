@@ -94,8 +94,8 @@ EMAIL_HOST_PASSWORD = 'password'
 EMAIL_PORT = 587
 ```
 
-**Warning!** Don't push this file to any repository after setup the recovery
-module, because your email password would be stored unencrypted.
+**Warning!** Don't push this changes to any repository after setup the password
+recovery module, because your email password is stored unencrypted.
 
 ### Adding your challenges
 
@@ -109,34 +109,35 @@ challenge_title,content_type,challenge_flag,challenge_description
 * `challenge_title` is the title of the challenge
 * `content_type` must be "download", "image", "link" or "page"
 * `challenge_flag` is the flag and must be in the following shape: `decipher{something}`
-* `challenge_description` is the challenge description
+* `challenge_description` is the challenge body text
 
-To examplify, we have two challenges (`Baby Steps` and `Test Challenge`), so our
-file stays like this:
+To examplify, we have three challenges (`Baby Steps`, `Test Challenge` and
+`Another Test`), so our file stays like this:
 
 ```
 "Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps"
 "Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify"
+"Another Test","page","decipher{n3wfl4g}","Another challenge, just to examplify"
 ```
 
 **Atention!** The order of the challenges in this file is the one that will be
 used.
 
-
-After that, go to `decipher/challenge/static/challenges_files` and create
-folders <b>with the same titles of each one of the challenges</b>.  In our
-example we have `Baby Steps` and `Test Challenge`. Inside this folders, we also
+After that, create the folder `decipher-me/decipher/scripts/challenges_files` and create
+folders <b>with the same titles of each one of the challenges</b>. Inside this folders, we must
 add the content files. If the `content_type` is a <b>image</b> or a
 <b>downloadable file</b>, you should just drop it inside the folder. If it's a
 <b>link</b>, you should add a `.txt` file containing the link. Finally, if it's
 a <b>page</b>, you should add the `.html` file (and others that may be
-necessary). The name of those files doesn't matter to us, cause we'll rename
+necessary, like `.js` files). The name of those files doesn't matter to us, cause we'll rename
 them.
 
 After adding all the challenges, navigate to the folder
-`decipher-me/decipher` and run the following command:
+`decipher-me/decipher` and run the following commands:
 
 ```
+rm db.sqlite3
+python3 migrate
 python3 manage.py shell < scripts/create_challenges.py
 ```
 
