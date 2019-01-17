@@ -10,8 +10,12 @@ from hashlib import sha256
 base_path = "challenge/static/challenges_files/"
 
 # first of all, clone challenges_files directory
-# from scripts folder to static folder
-shutil.copytree("scripts/challenges_files", base_path)
+# from scripts folder to challenge/static folder
+try:
+    shutil.copytree("scripts/challenges_files", base_path)
+except:
+    shutil.rmtree(base_path)
+    shutil.copytree("scripts/challenges_files", base_path)
 
 # settings file path
 settings_path = "scripts/settings.csv"
