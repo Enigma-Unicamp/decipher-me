@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 from private_files import PrivateFileField
 
 
@@ -7,8 +8,14 @@ from private_files import PrivateFileField
 # Our personalized decipher challenge user model. We could use the default
 # Django user model, but then it wouldn't be possible to add attributes to it
 class User(AbstractUser):
-    # needed to unlock challenges or each user
-    level = models.PositiveIntegerField(default=0)
+
+    if settings.SEQUENTIAL_CHALLENGES:
+        # needed to unlock challenges for each user
+        level = models.PositiveIntegerField(default=0)
+    else:
+        # needed to know which challenges has been done
+        challenges_done = models.TextField()
+
     # needed by the ranking module
     last_capture = models.DateTimeField(default=None, null=True, blank=True) 
 

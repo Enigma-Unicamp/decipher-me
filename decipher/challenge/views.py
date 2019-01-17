@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from . import forms
 from .models import User, Challenge
 
@@ -30,8 +31,13 @@ class HomeView(TemplateView):
 
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
-            challs = Challenge.objects.filter(id_chall__lte=request.user.level)
-            return render(request, self.template_name, { 'challenges' : challs })
+            challs = Challenge.objects.all()
+            # challs = Challenge.objects.filter(id_chall__lte=request.user.level)
+            return render(
+                       request, self.template_name,
+                       { 'challenges' : challs ,
+                         'sequential' : settings.SEQUENTIAL_CHALLENGES }
+                   )
         # otherwise, don't
         return render(request, self.template_name)
 
@@ -49,7 +55,7 @@ class ChallengeView(LoginRequiredMixin, View):
             )
 
         # user is allowed or not to check the challenge
-        if request.user.level < chall.id_chall:
+        if settings.SEQUENTIAL_CHALLENGES and request.user.level < chall.id_chall:
             return redirect('challenge:index')
 
         # if the post request has no 'flag', render the challenge page
@@ -75,13 +81,19 @@ class ChallengeView(LoginRequiredMixin, View):
         # pattern to verify regex
         pattern = re.compile("decipher{+[\x21-\x7E]+}$")
 
-        # flag is correct, so increase user level
-        if (pattern.match(flag) and hash_flag == chall.flag):
-            if request.user.level == chall.id_chall:
-                request.user.level += 1
-                request.user.last_capture = datetime.now()
-                request.user.save()
+        # flag is correct
+        if pattern.match(flag) and hash_flag == chall.flag:
+
+            if settings.SEQUENTIAL_CHALLENGES:
+                if request.user.level == chall.id_chall:
+                    request.user.level += 1
+            else:
+                if not str(chall.id_chall) in request.user.challenges_done:
+                    request.user.challenges_done += str(chall.id_chall)
+            request.user.last_capture = datetime.now()
+            request.user.save()
             return redirect('challenge:home')
+
         # flag is incorret
         else:
             return render(
