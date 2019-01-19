@@ -7,15 +7,20 @@ stages:
 build_job:
         stage: build
         before_script:
-                - pip3 install django
+                - pip3 install django pylint
         script:
                 - cd decipher/
                 - python3 scripts/generate_secret_key.py secretkey.txt
                 - ./manage.py check
 
-code_style_job:
+code_style_challange:
         stage: code_style
         before_script:
                 - pip3 install pylint
         script:
-                - python3 -c "import this"
+                - pylint --rcfile=.pylint.cfg decipher/challenge/
+
+code_style_scripts:
+        stage: code_style
+        script:
+                - pylint --rcfile=.pylint.cfg decipher/scripts/
