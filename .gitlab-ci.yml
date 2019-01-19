@@ -22,5 +22,7 @@ code_style_challange:
 
 code_style_scripts:
         stage: code_style
+        before_script:
+                - pip3 install pylint
         script:
                 - pylint --rcfile=.pylint.cfg decipher/scripts/
