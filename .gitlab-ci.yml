@@ -1,5 +1,15 @@
 image: python:latest 
 
-test:
+build:
+        before_script:
+                - pip3 install django
         script:
-        - python3 -v
+                - cd decipher/
+                - python3 scripts/generate_secret_key.py secretkey.txt
+                - ./manage.py check
+
+code_style:
+        before_script:
+                - pip3 install pylint
+        script:
+                - python3 -c "import this"
