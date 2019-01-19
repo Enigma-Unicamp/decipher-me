@@ -1,0 +1,52 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+
+    <!-- css file -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <!-- Cool icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+    <title> {% block title %}{% endblock %} </title>
+
+    {% block scripts %}{% endblock %}
+
+  </head>
+
+  <body style="margin-bottom: 50pt; height: 100%; overflow-y: scroll">
+
+    <div id="nav-menu">
+      <ul>
+        {% block menu_items %}
+
+          <li class="active"><a href="{% url 'challenge:home' %}">Home</a></li>
+          <li class="active"><a href="{% url 'challenge:rules' %}">Rules</a></li>
+
+          {% if request.user.is_authenticated %}
+            <li class="active" style="float:right"><a href="{% url 'challenge:logout' %}">Logout</a></li>
+            <li class="active" style="float:right"><a href="{% url 'challenge:password_change' %}">Password change</a></li>
+          {% else %}
+            <li class="active" style="float:right"><a href="{% url 'challenge:register' %}">Register</a></li>
+            <li class="active" style="float:right"><a href="{% url 'challenge:login' %}">Login</a></li>
+
+          {% endif %}
+
+        {% endblock %}
+      </ul>
+    </div>
+
+    <div id="main_content" class="container">
+      {% block content %}{% endblock %}
+    </div>
+
+    <div id="nav-bottom">
+      <p>Decipher - TODO: add GitLab icon</p>
+    </div>
+
+  </body>
+</html>
