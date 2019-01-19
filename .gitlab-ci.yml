@@ -1,6 +1,11 @@
 image: python:latest 
 
-build:
+stages:
+        - build
+        - code_style
+
+build_job:
+        stage: build
         before_script:
                 - pip3 install django
         script:
@@ -8,7 +13,8 @@ build:
                 - python3 scripts/generate_secret_key.py secretkey.txt
                 - ./manage.py check
 
-code_style:
+code_style_job:
+        stage: code_style
         before_script:
                 - pip3 install pylint
         script:
