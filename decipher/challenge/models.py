@@ -27,5 +27,6 @@ class Challenge(models.Model):
     type_chall   = models.CharField(max_length=20)
     file_content = models.TextField()
     description  = models.TextField()
+    points       = models.PositiveIntegerField()
     flag         = models.CharField(max_length=200)
 
