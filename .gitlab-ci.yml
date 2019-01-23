@@ -13,7 +13,7 @@ build_job:
                 - python3 scripts/generate_secret_key.py secretkey.txt
                 - ./manage.py check
 
-code_style_challange:
+code_style_challenge:
         stage: code_style
         before_script:
                 - pip3 install pylint
