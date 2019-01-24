@@ -198,3 +198,8 @@ class LogoutView(LoginRequiredMixin, View):
 
     template_name = 'challenge/ranking.html'
 
+    def get(self, request, *args, **kwargs):
+
+        logout(request)
+        return redirect('challenge:index')
+
