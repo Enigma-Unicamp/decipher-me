@@ -122,25 +122,28 @@ To add your own challenges, edit the file `scripts/settings.csv`. For each one
 of your challenges, you must add a new line like this:
 
 ```
-challenge_title,content_type,challenge_flag,challenge_description
+challenge_title,content_type,challenge_flag,challenge_description,challenge_points
 ```
 
-* `challenge_title` is the title of the challenge
-* `content_type` must be "download", "image", "link" or "page"
-* `challenge_flag` is the flag and must be in the following shape: `decipher{something}`
-* `challenge_description` is the challenge body text
+* `challenge_title`: title of the challenge
+* `content_type`: must be "download", "image", "link" or "page"
+* `challenge_flag`: is the flag and must be in the following shape: `decipher{something}`
+* `challenge_description`: challenge body text
+* `challenge_points`: how many points a user receives for solving this challenge
+(this is ignored if `SEQUENTIAL_CHALLENGES = True`, so just set it to "1" if
+that's the case)
+
+**Atention!** The order of the challenges in this file is the one that will be
+used.
 
 To examplify, we have three challenges (`Baby Steps`, `Test Challenge` and
 `Another Test`), so our file stays like this:
 
 ```
-"Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps"
-"Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify"
-"Another Test","page","decipher{n3wfl4g}","Another challenge, just to examplify"
+"Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps","1"
+"Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify","1"
+"Another Test","page","decipher{n3wfl4g}","Another challenge, just to examplify","1"
 ```
-
-**Atention!** The order of the challenges in this file is the one that will be
-used.
 
 After that, create the folder `decipher-me/decipher/scripts/challenges_files`
 and create folders with the same titles of each one of the challenges. Inside
