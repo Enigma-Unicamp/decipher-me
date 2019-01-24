@@ -9,11 +9,11 @@ from django.conf import settings
 class User(AbstractUser):
 
     if settings.SEQUENTIAL_CHALLENGES:
-        # needed to unlock challenges for each user
-        level = models.PositiveIntegerField(default=0)
-    else:
         # needed to know which challenges has been done
         challenges_done = models.TextField()
+    else:
+        # needed to unlock challenges for each user
+        level = models.PositiveIntegerField(default=0)
 
     # needed by the ranking module
     last_capture = models.DateTimeField(default=None, null=True, blank=True) 
