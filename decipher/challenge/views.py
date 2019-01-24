@@ -90,7 +90,7 @@ class ChallengeView(LoginRequiredMixin, View):
             else:
                 if not str(chall.id_chall) in request.user.challenges_done:
                     request.user.challenges_done += str(chall.id_chall)
-            request.user.last_capture = datetime.now()
+            request.user.last_capture = datetime.utcnow()
             request.user.save()
             return redirect('challenge:home')
 
@@ -137,6 +137,7 @@ class RegisterView(TemplateView):
                 password=form.cleaned_data['password'],
                 first_name=form.cleaned_data['first_name'],
                 email=form.cleaned_data['email'],
+                last_capture=datetime.utcnow(),
             )
             # Redirect new user to login page
             return redirect('challenge:login')
@@ -190,7 +191,18 @@ class RankingView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        return render(request, self.template_name)
+        if settings.SEQUENTIAL_CHALLENGES:
+
+            ranking = []
+            users = User.objects.filter(is_staff=False)
+            for user in users:
+                ranking.append((user.username, user.level, user.last_capture))
+            ranking.sort(key=lambda item: (-item[1], item[2]))
+        
+            return render(request, self.template_name, {'ranking': ranking})
+
+        else:
+            return render(request, self.template_name)
             
 
 
