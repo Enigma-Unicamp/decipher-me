@@ -4,6 +4,21 @@
 
     <h4 style="margin-bottom:30pt">
         Ranking
-    </h4>        
+    </h4>
+
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Points</th>
+        </tr>
+
+        {% for user in ranking %}
+            <tr>
+                <td> {{ user.0 }} </td>
+                <td> {{ user.1 }} </td>
+            </tr>
+        {% endfor %}
+
+    </table>
 
 {% endblock %}
