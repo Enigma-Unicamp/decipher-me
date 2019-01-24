@@ -3,6 +3,7 @@ Decipher challenge views
 '''
 
 from datetime import datetime
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, View
@@ -67,10 +68,10 @@ class ChallengeView(LoginRequiredMixin, View):
                 file_object = open(file_path, 'r')
                 link = file_object.read()
                 return render(
-                          request, self.template_name, 
+                          request, self.template_name,
                           {'link' : link, 'challenge' : chall }
                           )
-            
+
             # other types of challenges
             return render(request, self.template_name, { 'challenge' : chall })
 
@@ -90,7 +91,7 @@ class ChallengeView(LoginRequiredMixin, View):
             else:
                 if not str(chall.id_chall) in request.user.challenges_done:
                     request.user.challenges_done += str(chall.id_chall)
-            request.user.last_capture = datetime.utcnow()
+            request.user.last_capture = datetime.now(tz=timezone.utc)
             request.user.save()
             return redirect('challenge:home')
 
@@ -137,7 +138,7 @@ class RegisterView(TemplateView):
                 password=form.cleaned_data['password'],
                 first_name=form.cleaned_data['first_name'],
                 email=form.cleaned_data['email'],
-                last_capture=datetime.utcnow(),
+                last_capture=datetime.now(tz=timezone.utc),
             )
             # Redirect new user to login page
             return redirect('challenge:login')
@@ -154,7 +155,7 @@ class LoginView(TemplateView):
 
     # Render login page
     def get(self, request, *args, **kwargs):
-    
+
         # If the user is already logged redirect him to index
         if request.user.is_authenticated:
             return redirect('challenge:index')
@@ -197,13 +198,32 @@ class RankingView(LoginRequiredMixin, View):
             users = User.objects.filter(is_staff=False)
             for user in users:
                 ranking.append((user.username, user.level, user.last_capture))
+
+            # Sort according to user level and last capture,
+            # descending and ascending, respectively.
             ranking.sort(key=lambda item: (-item[1], item[2]))
-        
+
             return render(request, self.template_name, {'ranking': ranking})
 
         else:
-            return render(request, self.template_name)
-            
+
+            chall_points = Challenge.objects.all().values_list('points', flat=True)
+            ranking = []
+
+            users = User.objects.filter(is_staff=False)
+            for user in users:
+                points = 0
+                for chall in user.challenges_done:
+                    chall = int(chall)
+                    points += chall_points[chall]
+                ranking.append((user.username, points, user.last_capture))
+
+            # Sort according to number of points and last capture,
+            # descending and ascending, respectively.
+            ranking.sort(key=lambda item: (-item[1], item[2]))
+
+            return render(request, self.template_name, {'ranking': ranking})
+
 
 
 class LogoutView(LoginRequiredMixin, View):
