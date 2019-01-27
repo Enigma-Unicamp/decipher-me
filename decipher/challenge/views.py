@@ -212,11 +212,11 @@ class RankingView(LoginRequiredMixin, View):
                     points += chall_points[chall]
                 ranking.append((user.username, points, user.last_capture))
 
-         # Sort according to user level and last capture,
-         # descending and ascending, respectively.
-         ranking.sort(key=lambda item: (-item[1], item[2]))
+        # Sort according to user level and last capture,
+        # descending and ascending, respectively.
+        ranking.sort(key=lambda item: (-item[1], item[2]))
 
-         return render(request, self.template_name, {'ranking': ranking})
+        return render(request, self.template_name, {'ranking': ranking})
 
 
 
