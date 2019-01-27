@@ -88,11 +88,15 @@ class ChallengeView(LoginRequiredMixin, View):
             if settings.SEQUENTIAL_CHALLENGES:
                 if request.user.level == chall.id_chall:
                     request.user.level += 1
+                    request.user.last_capture = datetime.now(tz=timezone.utc)
+                    request.user.save()
+
             else:
                 if not str(chall.id_chall) in request.user.challenges_done:
                     request.user.challenges_done += str(chall.id_chall)
-            request.user.last_capture = datetime.now(tz=timezone.utc)
-            request.user.save()
+                    request.user.last_capture = datetime.now(tz=timezone.utc)
+                    request.user.save()
+
             return redirect('challenge:home')
 
         # flag is incorret
@@ -192,28 +196,15 @@ class RankingView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        if settings.SEQUENTIAL_CHALLENGES:
+        ranking = []
+        users = User.objects.filter(is_staff=False)
 
-            ranking = []
-            users = User.objects.filter(is_staff=False)
+        if settings.SEQUENTIAL_CHALLENGES:
             for user in users:
                 ranking.append([0, user.username, user.level, user.last_capture])
 
-            # Sort according to user level and last capture,
-            # descending and ascending, respectively.
-            ranking.sort(key=lambda item: (-item[2], item[3]))
-
-            for i in range(0, len(ranking)):
-                ranking[i][0] = i + 1
-
-            return render(request, self.template_name, {'ranking': ranking})
-
         else:
-
             chall_points = Challenge.objects.all().values_list('points', flat=True)
-            ranking = []
-
-            users = User.objects.filter(is_staff=False)
             for user in users:
                 points = 0
                 for chall in user.challenges_done:
@@ -221,14 +212,14 @@ class RankingView(LoginRequiredMixin, View):
                     points += chall_points[chall]
                 ranking.append([0, user.username, points, user.last_capture])
 
-            # Sort according to number of points and last capture,
-            # descending and ascending, respectively.
-            ranking.sort(key=lambda item: (-item[2], item[3]))
+        for i in range(0, len(ranking)):
+            ranking[i][0] = i + 1
 
-            for i in range(0, len(ranking)):
-                ranking[i][0] = i + 1
+        # Sort according to user level and last capture,
+        # descending and ascending, respectively.
+        ranking.sort(key=lambda item: (-item[2], item[3]))
 
-            return render(request, self.template_name, {'ranking': ranking})
+        return render(request, self.template_name, {'ranking': ranking})
 
 
 
