@@ -197,11 +197,14 @@ class RankingView(LoginRequiredMixin, View):
             ranking = []
             users = User.objects.filter(is_staff=False)
             for user in users:
-                ranking.append((user.username, user.level, user.last_capture))
+                ranking.append([0, user.username, user.level, user.last_capture])
 
             # Sort according to user level and last capture,
             # descending and ascending, respectively.
-            ranking.sort(key=lambda item: (-item[1], item[2]))
+            ranking.sort(key=lambda item: (-item[2], item[3]))
+
+            for i in range(0, len(ranking)):
+                ranking[i][0] = i + 1
 
             return render(request, self.template_name, {'ranking': ranking})
 
@@ -216,11 +219,14 @@ class RankingView(LoginRequiredMixin, View):
                 for chall in user.challenges_done:
                     chall = int(chall)
                     points += chall_points[chall]
-                ranking.append((user.username, points, user.last_capture))
+                ranking.append([0, user.username, points, user.last_capture])
 
             # Sort according to number of points and last capture,
             # descending and ascending, respectively.
-            ranking.sort(key=lambda item: (-item[1], item[2]))
+            ranking.sort(key=lambda item: (-item[2], item[3]))
+
+            for i in range(0, len(ranking)):
+                ranking[i][0] = i + 1
 
             return render(request, self.template_name, {'ranking': ranking})
 
