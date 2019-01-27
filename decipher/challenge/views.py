@@ -196,25 +196,15 @@ class RankingView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        if settings.SEQUENTIAL_CHALLENGES:
+        ranking = []
+        users = User.objects.filter(is_staff=False)
 
-            ranking = []
-            users = User.objects.filter(is_staff=False)
+        if settings.SEQUENTIAL_CHALLENGES:
             for user in users:
                 ranking.append((user.username, user.level, user.last_capture))
 
-            # Sort according to user level and last capture,
-            # descending and ascending, respectively.
-            ranking.sort(key=lambda item: (-item[1], item[2]))
-
-            return render(request, self.template_name, {'ranking': ranking})
-
         else:
-
             chall_points = Challenge.objects.all().values_list('points', flat=True)
-            ranking = []
-
-            users = User.objects.filter(is_staff=False)
             for user in users:
                 points = 0
                 for chall in user.challenges_done:
@@ -222,11 +212,11 @@ class RankingView(LoginRequiredMixin, View):
                     points += chall_points[chall]
                 ranking.append((user.username, points, user.last_capture))
 
-            # Sort according to number of points and last capture,
-            # descending and ascending, respectively.
-            ranking.sort(key=lambda item: (-item[1], item[2]))
+         # Sort according to user level and last capture,
+         # descending and ascending, respectively.
+         ranking.sort(key=lambda item: (-item[1], item[2]))
 
-            return render(request, self.template_name, {'ranking': ranking})
+         return render(request, self.template_name, {'ranking': ranking})
 
 
 
