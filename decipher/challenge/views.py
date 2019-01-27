@@ -88,11 +88,15 @@ class ChallengeView(LoginRequiredMixin, View):
             if settings.SEQUENTIAL_CHALLENGES:
                 if request.user.level == chall.id_chall:
                     request.user.level += 1
+                    request.user.last_capture = datetime.now(tz=timezone.utc)
+                    request.user.save()
+
             else:
                 if not str(chall.id_chall) in request.user.challenges_done:
                     request.user.challenges_done += str(chall.id_chall)
-            request.user.last_capture = datetime.now(tz=timezone.utc)
-            request.user.save()
+                    request.user.last_capture = datetime.now(tz=timezone.utc)
+                    request.user.save()
+
             return redirect('challenge:home')
 
         # flag is incorret
