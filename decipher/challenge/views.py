@@ -210,21 +210,36 @@ class RankingView(LoginRequiredMixin, View):
 
         if settings.SEQUENTIAL_CHALLENGES:
             for user in users:
-                ranking.append((user.username, user.level, user.last_capture))
+                # add every user to ranking at position 0
+                # after sorting we'll update the positions
+                ranking.append({'position' : 0, 'username': user.username, 
+                                'points': user.level, 
+                                'last_capture': user.last_capture}
+                              )
 
         else:
             chall_points = Challenge.objects.all().values_list('points', flat=True)
             for user in users:
                 points = 0
+
                 challenges_done = json.loads(user.challenges_done)
                 for i in range(len(challenges_done)):
                     if challenges_done[i] == '1':
                         points += chall_points[i]
-                ranking.append((user.username, points, user.last_capture))
+                # add every user to ranking at position 0
+                # after sorting we'll update the positions
+                ranking.append({'position' : 0, 'username': user.username, 
+                                'points': points, 
+                                'last_capture': user.last_capture}
+                              )
 
         # Sort according to user level and last capture,
         # descending and ascending, respectively.
-        ranking.sort(key=lambda item: (-item[1], item[2]))
+        ranking.sort(key=lambda item: (-item['points'], item['last_capture']))
+
+        # update each user position in ranking
+        for i in range(0, len(ranking)):
+            ranking[i]['position'] = i + 1
 
         return render(request, self.template_name, {'ranking': ranking})
 
