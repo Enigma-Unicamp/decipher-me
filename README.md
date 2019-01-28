@@ -118,8 +118,11 @@ recovery module, because your email password is stored unencrypted.
 
 ### Adding your challenges
 
-To add your own challenges, edit the file `scripts/settings.csv`. For each one
-of your challenges, you must add a new line like this:
+First of all, lets set the amount of challenges you're going to add. Edit
+`decipher-me/decipher/decipher/settings.py`, replacing `NUMBER_OF_CHALLENGES =
+3` with the correct number. After that, edit the file
+`scripts/settings.csv`. For each one of your challenges, you must add a new line
+like this:
 
 ```
 challenge_title,content_type,challenge_flag,challenge_description,challenge_points

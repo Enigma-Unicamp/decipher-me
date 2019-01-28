@@ -15,9 +15,9 @@
 
         {% for user in ranking %}
             <tr>
-                <td> {{ user.0 }} </td>
-                <td> {{ user.1 }} </td>
-                <td> {{ user.2 }} </td>
+                <td> {{ user.position }} </td>
+                <td> {{ user.username }} </td>
+                <td> {{ user.points }} </td>
             </tr>
         {% endfor %}
 
