@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
@@ -13,7 +14,9 @@ class User(AbstractUser):
         level = models.PositiveIntegerField(default=0)
     else:
         # needed to know which challenges has been done
-        challenges_done = models.TextField()
+        initial_val = ['0' for i in range(settings.NUMBER_OF_CHALLENGES)]
+        initial_val = json.dumps(initial_val)
+        challenges_done = models.TextField(default=initial_val)
 
     # needed by the ranking module
     last_capture = models.DateTimeField(default=None, null=True, blank=True) 

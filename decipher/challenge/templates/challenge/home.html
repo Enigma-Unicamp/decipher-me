@@ -32,7 +32,7 @@
                 {% for chall in challenges %}
                     <form action="{% url 'challenge:challenge' %}" method="post">
                         {% csrf_token %}
-                        {% if chall.id_chall|stringformat:"i" in request.user.challenges_done %}
+                        {% if chall.is_done == '1' %}
                             <i class="material-icons" style="vertical-align: middle">lock_open</i>
                             <input type="submit" value="{{ chall.title }}: {{ chall.points }} point(s)" class="btn">
                         {% else %}
