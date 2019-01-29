@@ -7,25 +7,19 @@ from .models import User
 
 
 
-class LoginForm(forms.ModelForm):
+class LoginForm(forms.Form):
 
-    class Meta:
-        model = User
-        fields = [
-            'username',
-            'password',
-        ]
-        help_texts = {
-            'username': 'username',
-            'password': 'password',
-        }
-        labels = {
-            'username': 'username',
-            'password': 'password',
-        }
-        widgets = {
-            'password': forms.PasswordInput(),
-        }
+    username_max_length = User._meta.get_field('username').max_length
+    password_max_length = User._meta.get_field('password').max_length
+
+    username = forms.CharField(
+        label='username',
+        max_length=username_max_length,
+        help_text='username')
+    password = forms.CharField(
+        label='password',
+        max_length=password_max_length,
+        widget=forms.PasswordInput)
 
 
 
@@ -68,8 +62,15 @@ class RegisterForm(forms.ModelForm):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
+        pass_min_length = 6
         if password != confirm_password:
             self.add_error(
                 'confirm_password',
-                forms.ValidationError("Passwords do not match")
+                forms.ValidationError("Passwords do not match.")
+            )
+        elif len(password) < pass_min_length:
+            self.add_error(
+                'password',
+                forms.ValidationError("Your password must have at least " +
+                                      "%d characters." %  pass_min_length)
             )
