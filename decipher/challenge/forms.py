@@ -7,16 +7,25 @@ from .models import User
 
 
 
-class LoginForm(forms.Form):
+class LoginForm(forms.ModelForm):
 
-    username = forms.CharField(
-        label='username',
-        max_length=50,
-        help_text='username')
-    password = forms.CharField(
-        label='password',
-        max_length=20,
-        widget=forms.PasswordInput)
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'password',
+        ]
+        help_texts = {
+            'username': 'username',
+            'password': 'password',
+        }
+        labels = {
+            'username': 'username',
+            'password': 'password',
+        }
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
 
 
 
