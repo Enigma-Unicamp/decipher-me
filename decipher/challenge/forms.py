@@ -34,6 +34,7 @@ class RegisterForm(forms.ModelForm):
     confirm_password=forms.CharField(
         label='confirm password',
         help_text='confirm your password',
+        max_length=User._meta.get_field('password').max_length,
         widget=forms.PasswordInput())
 
     class Meta:
