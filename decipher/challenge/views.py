@@ -34,11 +34,13 @@ class HomeView(TemplateView):
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
             challs = Challenge.objects.all().values()
-            challs_done = json.loads(request.user.challenges_done)
 
             # concatenate challenge info with field that tells if user has done it
-            for i in range(len(challs)):
-                challs[i].update({ 'is_done' : challs_done[i] })
+            if not settings.SEQUENTIAL_CHALLENGES:
+                challs_done = json.loads(request.user.challenges_done)
+
+                for i in range(len(challs)):
+                    challs[i].update({ 'is_done' : challs_done[i] })
 
             return render(
                 request, self.template_name,
