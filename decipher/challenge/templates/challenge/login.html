@@ -6,6 +6,16 @@
 
 {% block content %}
 
+  <!-- Display any forms error -->
+  {% if form.errors %}
+    {% for field in form %}
+      {% for error in field.errors %}
+        <div class="error-message">{{ error }}</div>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+
+  <!-- Page title -->
   <h4 style="margin-bottom:30px">
     Login
   </h4>

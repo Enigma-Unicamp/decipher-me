@@ -4,7 +4,7 @@ Decipher challenge forms
 
 from django import forms
 from .models import User
-
+from django.contrib.auth import authenticate, login
 
 
 class LoginForm(forms.Form):
@@ -20,6 +20,17 @@ class LoginForm(forms.Form):
         label='password',
         max_length=password_max_length,
         widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get("username")
+        password = cleaned_data.get("password")
+
+    def invalidLoginMessage(self):
+        self.add_error(
+            'username',
+            forms.ValidationError("Invalid username or password.")
+        )
 
 
 

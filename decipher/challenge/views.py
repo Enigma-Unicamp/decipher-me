@@ -61,16 +61,17 @@ class ChallengeView(LoginRequiredMixin, View):
         # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
 
-            # 'link type challenge', so open the link file to pass the link to template
+            # 'link type challenge', so open the link file to
+            # pass the link to template
             if chall.type_chall == 'link':
                 file_path = "challenge/static/" + chall.file_content
                 file_object = open(file_path, 'r')
                 link = file_object.read()
                 return render(
-                          request, self.template_name, 
+                          request, self.template_name,
                           {'link' : link, 'challenge' : chall }
                           )
-            
+
             # other types of challenges
             return render(request, self.template_name, { 'challenge' : chall })
 
@@ -153,7 +154,7 @@ class LoginView(TemplateView):
 
     # Render login page
     def get(self, request, *args, **kwargs):
-    
+
         # If the user is already logged redirect him to index
         if request.user.is_authenticated:
             return redirect('challenge:index')
@@ -169,18 +170,19 @@ class LoginView(TemplateView):
 
         # Check if the attempt is valid
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
             user = authenticate(request, username=username, password=password)
-
-            # Authenticate user if he's valid
+            # If valid user, redirect to index page
             if user is not None:
                 login(request, user)
-                print("User {} logged".format(user))
                 return redirect('challenge:index')
+            # Otherwise spawn invalid login message
+            else:
+                form.invalidLoginMessage()
 
-        # Otherwise show the login page again
-        return redirect('challenge:login')
+        # Show the login page again (with invalid login message)
+        return render(request, self.template_name, {'form': form})
 
 
 
