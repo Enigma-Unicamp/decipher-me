@@ -227,9 +227,6 @@ class PasswordChangeView(TemplateView):
         
             # Change user password
             new_password = form.cleaned_data.get("new_password")
-
-            print(username)
-            print(new_password)
             user.set_password(new_password)
             user.save()
 
