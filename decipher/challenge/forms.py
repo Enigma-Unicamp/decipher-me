@@ -4,7 +4,6 @@ Decipher challenge forms
 
 from django import forms
 from .models import User
-from django.contrib.auth import authenticate, login
 
 
 class LoginForm(forms.Form):
@@ -73,15 +72,37 @@ class RegisterForm(forms.ModelForm):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
+        email = cleaned_data.get("email")
+        username = cleaned_data.get("username")
+
+        # check if password size is ok
         pass_min_length = 6
         if password != confirm_password:
             self.add_error(
                 'confirm_password',
                 forms.ValidationError("Passwords do not match.")
             )
+
+        # try to match password and confirm password
         elif len(password) < pass_min_length:
             self.add_error(
                 'password',
                 forms.ValidationError("Your password must have at least " +
                                       "%d characters." %  pass_min_length)
+            )
+
+        # check if email has not yet been taken
+        if User.objects.filter(email=email):
+            self.add_error(
+                'email',
+                forms.ValidationError("This email address is already in use.")
+            )
+
+        # check if username size is ok
+        user_min_length = 6
+        if len(username) < user_min_length:
+            self.add_error(
+                'username',
+                forms.ValidationError("Your username must have at least " +
+                                      "%d characters." %  user_min_length)
             )
