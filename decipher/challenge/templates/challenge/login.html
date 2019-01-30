@@ -6,27 +6,27 @@
 
 {% block content %}
 
-  <!-- Display any forms error -->
-  {% if form.errors %}
-    {% for field in form %}
-      {% for error in field.errors %}
-        <div class="error-message">{{ error }}</div>
-      {% endfor %}
-    {% endfor %}
-  {% endif %}
-
   <!-- Page title -->
   <h4 style="margin-bottom:30px">
     Login
   </h4>
+
+  <!-- Display any forms error -->
+  {% if form.errors %}
+    {% for field in form %}
+      {% for error in field.errors %}
+        <div class="error-message">{{ error }}</div> <br />
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
 
   <form action="{% url 'challenge:login' %}" method="post">
 
     <!-- Login form fields -->
     {% csrf_token %}
     {% for field in form %}
-      {{ field.label_tag | title }}<br />
-      {{ field }}<br />
+      {{ field.label_tag | title }}
+      {{ field }}
     {% endfor %}
 
     <!-- Buttons: confirm login -->
