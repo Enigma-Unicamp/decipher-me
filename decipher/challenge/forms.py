@@ -4,6 +4,7 @@ Decipher challenge forms
 
 from django import forms
 from .models import User
+from django.contrib.auth.password_validation import validate_password
 
 
 class LoginForm(forms.Form):
@@ -24,6 +25,7 @@ class LoginForm(forms.Form):
         cleaned_data = super().clean()
         username = cleaned_data.get("username")
         password = cleaned_data.get("password")
+        return cleaned_data
 
     def invalidLoginMessage(self):
         self.add_error(
@@ -35,8 +37,8 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.ModelForm):
 
-    confirm_password=forms.CharField(
-        label='confirm password',
+    password_confirmation=forms.CharField(
+        label='password confirmation',
         help_text='confirm your password',
         max_length=User._meta.get_field('password').max_length,
         widget=forms.PasswordInput())
@@ -71,25 +73,22 @@ class RegisterForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
+        password_confirmation = cleaned_data.get("password_confirmation")
         email = cleaned_data.get("email")
         username = cleaned_data.get("username")
 
-        # check if password size is ok
-        pass_min_length = 6
-        if password != confirm_password:
+        # check if password and password confirmation match
+        if password != password_confirmation:
             self.add_error(
-                'confirm_password',
-                forms.ValidationError("Passwords do not match.")
+                'password_confirmation',
+                forms.ValidationError("The two password fields didn't match.")
             )
 
-        # try to match password and confirm password
-        elif len(password) < pass_min_length:
-            self.add_error(
-                'password',
-                forms.ValidationError("Your password must have at least " +
-                                      "%d characters." %  pass_min_length)
-            )
+        # password validation (using validators defined in settings.py)
+        try:
+            validate_password(password)
+        except forms.ValidationError as error:
+            self.add_error('password_confirmation', error)
 
         # check if email has not yet been taken
         if User.objects.filter(email=email):
@@ -103,6 +102,9 @@ class RegisterForm(forms.ModelForm):
         if len(username) < user_min_length:
             self.add_error(
                 'username',
-                forms.ValidationError("Your username must have at least " +
-                                      "%d characters." %  user_min_length)
+                forms.ValidationError("This username is too short. It must " +
+                                      "contain at least %d characters." 
+                                      %  user_min_length)
             )
+
+        return cleaned_data
