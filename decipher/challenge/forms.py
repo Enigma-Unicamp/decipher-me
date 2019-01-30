@@ -35,6 +35,45 @@ class LoginForm(forms.Form):
 
 
 
+class PasswordChangeForm(forms.Form):
+
+    password_max_length = User._meta.get_field('password').max_length
+
+    new_password = forms.CharField(
+        label='new password',
+        help_text='inser new password',
+        max_length=password_max_length,
+        widget=forms.PasswordInput)
+    new_password_confirmation=forms.CharField(
+        label='new password confirmation',
+        help_text='confirm your password',
+        max_length=password_max_length,
+        widget=forms.PasswordInput())
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        new_password_confirmation = cleaned_data.get(
+                                        "new_password_confirmation"
+                                    )
+
+        # check if password and password confirmation match
+        if new_password != new_password_confirmation:
+            self.add_error(
+                'new_password_confirmation',
+                forms.ValidationError("The two password fields didn't match.")
+            )
+
+        # password validation (using validators defined in settings.py)
+        try:
+            validate_password(new_password)
+        except forms.ValidationError as error:
+            self.add_error('new_password_confirmation', error)
+
+        return cleaned_data
+
+
+
 class RegisterForm(forms.ModelForm):
 
     password_confirmation=forms.CharField(
