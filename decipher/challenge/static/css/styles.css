@@ -57,6 +57,12 @@ html *{
   text-decoration: none;
 }
 
+.success-message{
+  color: rgba(82, 187, 37, 0.8);
+  font-weight: bold;
+  font-size: small;
+}
+
 .error-message{
   color: rgba(255,0,0,0.8);
   font-weight: bold;

@@ -11,6 +11,13 @@
     Login
   </h4>
 
+  <!-- Display successful message after user sign up -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="success-message">{{ message }}</div> <br />
+    {% endfor %}
+  {% endif %}
+
   <!-- Display any forms error -->
   {% if form.errors %}
     {% for field in form %}
