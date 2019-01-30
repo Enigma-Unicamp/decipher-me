@@ -3,6 +3,7 @@ Decipher challenge views
 '''
 
 from datetime import datetime
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, View
@@ -133,6 +134,7 @@ class RegisterView(TemplateView):
 
         # If the form is valid create new user object
         if form.is_valid():
+            messages.success(request, 'Registration successful.')
             User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'],
