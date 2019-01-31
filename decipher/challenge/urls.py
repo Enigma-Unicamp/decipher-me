@@ -13,6 +13,7 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='register'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('ranking/', views.RankingView.as_view(), name='ranking'),
     path('password_change/',
          auth_views.PasswordChangeView.as_view(template_name='challenge/password_change.html'),
          name='password_change'),

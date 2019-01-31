@@ -28,6 +28,7 @@
           <li class="active"><a href="{% url 'challenge:rules' %}">Rules</a></li>
 
           {% if request.user.is_authenticated %}
+            <li class="active"><a href="{% url 'challenge:ranking' %}">Ranking</a></li>
             <li class="active" style="float:right"><a href="{% url 'challenge:logout' %}">Logout</a></li>
             <li class="active" style="float:right"><a href="{% url 'challenge:password_change' %}">Password change</a></li>
           {% else %}
