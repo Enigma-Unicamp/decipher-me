@@ -195,3 +195,55 @@ class LogoutView(LoginRequiredMixin, View):
 
         logout(request)
         return redirect('challenge:index')
+
+
+
+class PasswordChangeView(TemplateView):
+
+    template_name = 'challenge/password_change.html'
+    form_class = forms.PasswordChangeForm
+
+    # Render change password form
+    def get(self, request, *args, **kwargs):
+
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    # Handle password change attempt
+    def post(self, request):
+
+        form = self.form_class(request.POST)
+
+        # If the form is valid change user password
+        if form.is_valid():
+
+            # Get user object
+            username = request.user.username
+            user = User.objects.get(username__exact=username)
+
+            # Change user password
+            new_password = form.cleaned_data.get("new_password")
+            user.set_password(new_password)
+            user.save()
+
+            # Redirect user to login page with success message
+            messages.success(
+                request, "Password change successful. "
+                + "Please login again."
+            )
+            return redirect('challenge:login')
+
+        # Otherwise render change password page again
+        return render(request, self.template_name, {'form': form})
+
+
+
+class PasswordResetCompleteView(TemplateView):
+
+    # Redirect to login page with success message
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(
+            request, "Password reset successful. "
+            + "Please login again."
+        )
+        return redirect('challenge:login')
