@@ -198,7 +198,7 @@ class LogoutView(LoginRequiredMixin, View):
 
 
 
-class PasswordChangeView(TemplateView):
+class PasswordChangeView(LoginRequiredMixin, TemplateView):
 
     template_name = 'challenge/password_change.html'
     form_class = forms.PasswordChangeForm
