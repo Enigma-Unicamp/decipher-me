@@ -5,6 +5,7 @@ Decipher challenge forms
 from django import forms
 from .models import User
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.forms import SetPasswordForm
 
 
 class LoginForm(forms.Form):
@@ -32,45 +33,6 @@ class LoginForm(forms.Form):
             'username',
             forms.ValidationError("Invalid username or password.")
         )
-
-
-
-class PasswordChangeForm(forms.Form):
-
-    password_max_length = User._meta.get_field('password').max_length
-
-    new_password = forms.CharField(
-        label='new password',
-        help_text='inser new password',
-        max_length=password_max_length,
-        widget=forms.PasswordInput)
-    new_password_confirmation=forms.CharField(
-        label='new password confirmation',
-        help_text='confirm your password',
-        max_length=password_max_length,
-        widget=forms.PasswordInput())
-
-    def clean(self):
-        cleaned_data = super().clean()
-        new_password = cleaned_data.get("new_password")
-        new_password_confirmation = cleaned_data.get(
-                                        "new_password_confirmation"
-                                    )
-
-        # check if password and password confirmation match
-        if new_password != new_password_confirmation:
-            self.add_error(
-                'new_password_confirmation',
-                forms.ValidationError("The two password fields didn't match.")
-            )
-
-        # password validation (using validators defined in settings.py)
-        try:
-            validate_password(new_password)
-        except forms.ValidationError as error:
-            self.add_error('new_password_confirmation', error)
-
-        return cleaned_data
 
 
 
@@ -147,3 +109,95 @@ class RegisterForm(forms.ModelForm):
             )
 
         return cleaned_data
+
+
+
+class PasswordChangeForm(forms.Form):
+
+    password_max_length = User._meta.get_field('password').max_length
+
+    new_password = forms.CharField(
+        label='new password',
+        help_text='inser new password',
+        max_length=password_max_length,
+        widget=forms.PasswordInput)
+    new_password_confirmation = forms.CharField(
+        label='new password confirmation',
+        help_text='confirm your password',
+        max_length=password_max_length,
+        widget=forms.PasswordInput())
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        new_password_confirmation = cleaned_data.get(
+                                        "new_password_confirmation"
+                                    )
+
+        # check if password and password confirmation match
+        if new_password != new_password_confirmation:
+            self.add_error(
+                'new_password_confirmation',
+                forms.ValidationError("The two password fields didn't match.")
+            )
+
+        # password validation (using validators defined in settings.py)
+        try:
+            validate_password(new_password)
+        except forms.ValidationError as error:
+            self.add_error('new_password_confirmation', error)
+
+        return cleaned_data
+
+
+
+# This is SetPasswordForm from django.contrib.auth.forms.
+# I got their code but changed max length for password fields.
+# I also made a change in the raise error logic.
+# https://docs.djangoproject.com/en/1.8/_modules/django/contrib/auth/forms/
+class PasswordResetConfirmForm(forms.Form):
+
+    password_max_length = User._meta.get_field('password').max_length
+
+    new_password1 = forms.CharField(
+        label='new password',
+        help_text='inser new password',
+        max_length=password_max_length,
+        widget=forms.PasswordInput)
+    new_password2 = forms.CharField(
+        label='new password confirmation',
+        help_text='confirm your password',
+        max_length=password_max_length,
+        widget=forms.PasswordInput())
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(PasswordResetConfirmForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+
+            # check if password and password confirmation match
+            if password1 != password2:
+                self.add_error(
+                    'new_password2',
+                    forms.ValidationError("The two password fields "
+                                          + "didn't match.")
+                )
+
+            # password validation (using validators defined in settings.py)
+            try:
+                validate_password(password2)
+            except forms.ValidationError as error:
+                self.add_error('new_password2', error)
+
+        return password2
+
+    def save(self, commit=True):
+        self.user.set_password(self.cleaned_data['new_password1'])
+        if commit:
+            self.user.save()
+
+        return self.user
