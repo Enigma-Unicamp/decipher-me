@@ -6,18 +6,18 @@
         Ranking
     </h4>
 
-    <table>
+    <table style="table-layout:fixed">
         <tr>
-            <th>Position</th>
-            <th>Username</th>
-            <th>Points</th>
+            <th style="text-align:center">Position</th>
+            <th style="text-align:center">Username</th>
+            <th style="text-align:center">Points</th>
         </tr>
 
         {% for user in ranking %}
             <tr>
-                <td> {{ user.position }} </td>
-                <td> {{ user.username }} </td>
-                <td> {{ user.points }} </td>
+                <td style="text-align:center; overflow:hidden"> {{ user.position }} </td>
+                <td style="text-align:center; overflow:hidden"> {{ user.username }} </td>
+                <td style="text-align:center; overflow:hidden"> {{ user.points }} </td>
             </tr>
         {% endfor %}
 
