@@ -1,13 +1,15 @@
 '''
 Decipher challenge views
 '''
-
+import json
 from datetime import datetime
 from django.contrib import messages
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms.models import model_to_dict
 from django.conf import settings
 from . import forms
 from .models import User, Challenge
@@ -32,13 +34,21 @@ class HomeView(TemplateView):
 
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
-            challs = Challenge.objects.all()
-            # challs = Challenge.objects.filter(id_chall__lte=request.user.level)
+            challs = Challenge.objects.all().values()
+
+            # concatenate challenge info with field that tells if user has done it
+            if not settings.SEQUENTIAL_CHALLENGES:
+                challs_done = json.loads(request.user.challenges_done)
+
+                for i in range(len(challs)):
+                    challs[i].update({ 'is_done' : challs_done[i] })
+
             return render(
-                       request, self.template_name,
-                       { 'challenges' : challs ,
-                         'sequential' : settings.SEQUENTIAL_CHALLENGES }
-                   )
+                request, self.template_name,
+                { 'challenges' : challs,
+                  'sequential' : settings.SEQUENTIAL_CHALLENGES }
+            )
+
         # otherwise, don't
         return render(request, self.template_name)
 
@@ -89,11 +99,17 @@ class ChallengeView(LoginRequiredMixin, View):
             if settings.SEQUENTIAL_CHALLENGES:
                 if request.user.level == chall.id_chall:
                     request.user.level += 1
+                    request.user.last_capture = datetime.now(tz=timezone.utc)
+                    request.user.save()
+
             else:
-                if not str(chall.id_chall) in request.user.challenges_done:
-                    request.user.challenges_done += str(chall.id_chall)
-            request.user.last_capture = datetime.now()
-            request.user.save()
+                challenges_done = json.loads(request.user.challenges_done)
+                if challenges_done[chall.id_chall] != '1':
+                    challenges_done[chall.id_chall] = '1'
+                    request.user.challenges_done = json.dumps(challenges_done)
+                    request.user.last_capture = datetime.now(tz=timezone.utc)
+                    request.user.save()
+
             return redirect('challenge:home')
 
         # flag is incorret
@@ -140,6 +156,7 @@ class RegisterView(TemplateView):
                 password=form.cleaned_data['password'],
                 first_name=form.cleaned_data['first_name'],
                 email=form.cleaned_data['email'],
+                last_capture=datetime.now(tz=timezone.utc),
             )
             # Redirect new user to login page
             return redirect('challenge:login')
@@ -188,9 +205,56 @@ class LoginView(TemplateView):
 
 
 
+class RankingView(LoginRequiredMixin, View):
+
+    template_name = 'challenge/ranking.html'
+
+    def get(self, request, *args, **kwargs):
+
+        ranking = []
+        users = User.objects.filter(is_staff=False)
+
+        if settings.SEQUENTIAL_CHALLENGES:
+            for user in users:
+                # add every user to ranking at position 0
+                # after sorting we'll update the positions
+                ranking.append({'position' : 0, 'username': user.username, 
+                                'points': user.level, 
+                                'last_capture': user.last_capture}
+                              )
+
+        else:
+            chall_points = Challenge.objects.all().values_list('points', flat=True)
+            for user in users:
+                points = 0
+
+                challenges_done = json.loads(user.challenges_done)
+                for i in range(len(challenges_done)):
+                    if challenges_done[i] == '1':
+                        points += chall_points[i]
+                # add every user to ranking at position 0
+                # after sorting we'll update the positions
+                ranking.append({'position' : 0, 'username': user.username, 
+                                'points': points, 
+                                'last_capture': user.last_capture}
+                              )
+
+        # Sort according to user level and last capture,
+        # descending and ascending, respectively.
+        ranking.sort(key=lambda item: (-item['points'], item['last_capture']))
+
+        # update each user position in ranking
+        for i in range(0, len(ranking)):
+            ranking[i]['position'] = i + 1
+
+        return render(request, self.template_name, {'ranking': ranking})
+
+
+
 class LogoutView(LoginRequiredMixin, View):
 
-    # Logout user and redirect him to index
+    template_name = 'challenge/ranking.html'
+
     def get(self, request, *args, **kwargs):
 
         logout(request)

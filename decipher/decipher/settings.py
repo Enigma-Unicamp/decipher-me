@@ -133,6 +133,10 @@ AUTH_USER_MODEL = 'challenge.User'
 SEQUENTIAL_CHALLENGES = False
 
 
+# Number of challenges
+NUMBER_OF_CHALLENGES = 3
+
+
 # Email settings (needed by reset password module)
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
