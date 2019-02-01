@@ -3,6 +3,7 @@ Decipher challenge views
 '''
 import json
 from datetime import datetime
+from django.contrib import messages
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -71,7 +72,8 @@ class ChallengeView(LoginRequiredMixin, View):
         # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
 
-            # 'link type challenge', so open the link file to pass the link to template
+            # 'link type challenge', so open the link file to
+            # pass the link to template
             if chall.type_chall == 'link':
                 file_path = "challenge/static/" + chall.file_content
                 file_object = open(file_path, 'r')
@@ -148,6 +150,7 @@ class RegisterView(TemplateView):
 
         # If the form is valid create new user object
         if form.is_valid():
+            messages.success(request, 'Registration successful.')
             User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'],
@@ -186,18 +189,19 @@ class LoginView(TemplateView):
 
         # Check if the attempt is valid
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
             user = authenticate(request, username=username, password=password)
-
-            # Authenticate user if he's valid
+            # If valid user, redirect to index page
             if user is not None:
                 login(request, user)
-                print("User {} logged".format(user))
                 return redirect('challenge:index')
+            # Otherwise spawn invalid login message
+            else:
+                form.invalidLoginMessage()
 
-        # Otherwise show the login page again
-        return redirect('challenge:login')
+        # Show the login page again (with invalid login message)
+        return render(request, self.template_name, {'form': form})
 
 
 
@@ -256,3 +260,54 @@ class LogoutView(LoginRequiredMixin, View):
         logout(request)
         return redirect('challenge:index')
 
+
+
+class PasswordChangeView(LoginRequiredMixin, TemplateView):
+
+    template_name = 'challenge/password_change.html'
+    form_class = forms.PasswordChangeForm
+
+    # Render change password form
+    def get(self, request, *args, **kwargs):
+
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    # Handle password change attempt
+    def post(self, request):
+
+        form = self.form_class(request.POST)
+
+        # If the form is valid change user password
+        if form.is_valid():
+
+            # Get user object
+            username = request.user.username
+            user = User.objects.get(username__exact=username)
+
+            # Change user password
+            new_password = form.cleaned_data.get("new_password")
+            user.set_password(new_password)
+            user.save()
+
+            # Redirect user to login page with success message
+            messages.success(
+                request, "Password change successful. "
+                + "Please login again."
+            )
+            return redirect('challenge:login')
+
+        # Otherwise render change password page again
+        return render(request, self.template_name, {'form': form})
+
+
+
+class PasswordResetCompleteView(TemplateView):
+
+    # Redirect to login page with success message
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(
+            request, "Password reset successful. "
+            + "Please login again."
+        )
+        return redirect('challenge:login')
