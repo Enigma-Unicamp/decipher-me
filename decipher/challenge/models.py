@@ -14,6 +14,9 @@ class User(AbstractUser):
     initial_val = json.dumps(initial_val)
     challenges_done = models.TextField(default=initial_val)
 
+    # points that user got
+    points = models.PositiveIntegerField()
+
     # ranking tiebreaker
     last_capture = models.DateTimeField(default=None, null=True, blank=True) 
 

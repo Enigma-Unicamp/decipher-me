@@ -133,6 +133,7 @@ class ChallengeView(LoginRequiredMixin, View):
             if challenges_done[chall.id_chall] != '1':
                 challenges_done[chall.id_chall] = '1'
                 request.user.challenges_done = json.dumps(challenges_done)
+                request.user.points += chall.points
                 request.user.last_capture = datetime.now(tz=timezone.utc)
                 request.user.save()
 
@@ -182,6 +183,7 @@ class RegisterView(TemplateView):
                 password=form.cleaned_data['password'],
                 first_name=form.cleaned_data['first_name'],
                 email=form.cleaned_data['email'],
+                points=0,
                 last_capture=datetime.now(tz=timezone.utc),
             )
             # Redirect new user to login page
@@ -239,29 +241,9 @@ class RankingView(LoginRequiredMixin, View):
 
         ranking = []
         users = User.objects.filter(is_staff=False)
+        ranking = users.order_by('-points', 'last_capture')
 
-        chall_points = Challenge.objects.all().values_list('points', flat=True)
-        for user in users:
-            points = 0
-
-            challenges_done = json.loads(user.challenges_done)
-            for i in range(len(challenges_done)):
-                if challenges_done[i] == '1':
-                    points += chall_points[i]
-            # add every user to ranking at position 0
-            # after sorting we'll update the positions
-            ranking.append({'position' : 0, 'username': user.username, 
-                            'points': points, 
-                            'last_capture': user.last_capture}
-                          )
-
-        # Sort according to user points and last capture,
-        # descending and ascending, respectively.
-        ranking.sort(key=lambda item: (-item['points'], item['last_capture']))
-
-        # update each user position in ranking
-        for i in range(0, len(ranking)):
-            ranking[i]['position'] = i + 1
+        print(ranking)
 
         return render(request, self.template_name, {'ranking': ranking})
 
