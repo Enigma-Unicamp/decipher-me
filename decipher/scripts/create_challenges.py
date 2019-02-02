@@ -66,7 +66,31 @@ with open(settings_path, 'r') as settings_file:
             file_content = content_path,
             flag = sha256(challenge_flag.encode('utf-8')).hexdigest(),
             points = int(challenge_points)
-            )
+        )
 
         id_challenge += 1
+
+
+# replace NUMBER_OF_CHALLENGES constant in settings.py
+number_of_challenges = id_challenge
+
+# settings file paths
+old_settings_path = "decipher/settings.py"
+new_settings_path = "decipher/new_settings.py"
+
+with open(old_settings_path, 'r') as old_settings_file:
+    with open(new_settings_path, 'w') as new_settings_file:    
+
+        for line in old_settings_file:
+            if 'NUMBER_OF_CHALLENGES' in line:
+                new_line = 'NUMBER_OF_CHALLENGES = ' \
+                           + str(number_of_challenges) + '\n'
+                new_settings_file.write(new_line)
+            else:
+                new_settings_file.write(line)                    
+
+# replace old file by new one and then delete it
+shutil.copy(new_settings_path, old_settings_path)
+os.remove(new_settings_path)
+
 
