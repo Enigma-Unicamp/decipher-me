@@ -34,14 +34,42 @@ class HomeView(TemplateView):
 
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
-            challs = Challenge.objects.all().values()
+            challs = list(Challenge.objects.all().values())
 
-            # concatenate challenge info with field that tells if user has done it
-            if not settings.SEQUENTIAL_CHALLENGES:
-                challs_done = json.loads(request.user.challenges_done)
+            # concatenate challenge info with field that
+            # says if user has unlocked or not the challenge
+            # and info that says if user has done ir ot not
+            challenges_done = json.loads(request.user.challenges_done)
 
-                for i in range(len(challs)):
-                    challs[i].update({ 'is_done' : challs_done[i] })
+            if settings.SEQUENTIAL_CHALLENGES:
+
+                # for sequential challenges, challenge 0 may be done or
+                # not, but is always unlocked for everybody
+                challs[0]['is_done'] = challenges_done[0]
+                challs[0]['locked'] = '0'
+
+                # from challenge 1 onwards, we need to verify if
+                # it's unlocked or not
+                for i in range(1, len(challs)):
+                    if challenges_done[i] == '1':
+                        is_done = '1'
+                        locked = '0'
+                    elif challenges_done[i - 1] == '1':
+                        is_done = '0'
+                        locked = '0'
+                    else:
+                        is_done = '0'
+                        locked = '1'
+                    challs[i]['is_done'] = is_done
+                    challs[i]['locked'] = locked
+
+            # for non sequential challenges, every challenge is unlocked 
+            else:
+                for i in range(0, len(challs)):
+                    is_done = challenges_done[i]
+                    locked = '0'
+                    challs[i]['is_done'] = is_done
+                    challs[i]['locked'] = locked
 
             return render(
                 request, self.template_name,
@@ -65,9 +93,14 @@ class ChallengeView(LoginRequiredMixin, View):
             id_chall=request.POST['id_chall']
             )
 
-        # user is allowed or not to check the challenge
-        if settings.SEQUENTIAL_CHALLENGES and request.user.level < chall.id_chall:
-            return redirect('challenge:index')
+        # challenges done by user
+        challenges_done = json.loads(request.user.challenges_done)
+
+        # user isn't allowed to check this challenge
+        if settings.SEQUENTIAL_CHALLENGES:
+            if chall.id_chall != 0:
+                if challenges_done[chall.id_chall - 1] == '0':
+                    return redirect('challenge:index')
 
         # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
@@ -96,19 +129,12 @@ class ChallengeView(LoginRequiredMixin, View):
         # flag is correct
         if pattern.match(flag) and hash_flag == chall.flag:
 
-            if settings.SEQUENTIAL_CHALLENGES:
-                if request.user.level == chall.id_chall:
-                    request.user.level += 1
-                    request.user.last_capture = datetime.now(tz=timezone.utc)
-                    request.user.save()
-
-            else:
-                challenges_done = json.loads(request.user.challenges_done)
-                if challenges_done[chall.id_chall] != '1':
-                    challenges_done[chall.id_chall] = '1'
-                    request.user.challenges_done = json.dumps(challenges_done)
-                    request.user.last_capture = datetime.now(tz=timezone.utc)
-                    request.user.save()
+            # if it's not a flag resubmission, accept it
+            if challenges_done[chall.id_chall] != '1':
+                challenges_done[chall.id_chall] = '1'
+                request.user.challenges_done = json.dumps(challenges_done)
+                request.user.last_capture = datetime.now(tz=timezone.utc)
+                request.user.save()
 
             return redirect('challenge:home')
 
@@ -214,32 +240,22 @@ class RankingView(LoginRequiredMixin, View):
         ranking = []
         users = User.objects.filter(is_staff=False)
 
-        if settings.SEQUENTIAL_CHALLENGES:
-            for user in users:
-                # add every user to ranking at position 0
-                # after sorting we'll update the positions
-                ranking.append({'position' : 0, 'username': user.username, 
-                                'points': user.level, 
-                                'last_capture': user.last_capture}
-                              )
+        chall_points = Challenge.objects.all().values_list('points', flat=True)
+        for user in users:
+            points = 0
 
-        else:
-            chall_points = Challenge.objects.all().values_list('points', flat=True)
-            for user in users:
-                points = 0
+            challenges_done = json.loads(user.challenges_done)
+            for i in range(len(challenges_done)):
+                if challenges_done[i] == '1':
+                    points += chall_points[i]
+            # add every user to ranking at position 0
+            # after sorting we'll update the positions
+            ranking.append({'position' : 0, 'username': user.username, 
+                            'points': points, 
+                            'last_capture': user.last_capture}
+                          )
 
-                challenges_done = json.loads(user.challenges_done)
-                for i in range(len(challenges_done)):
-                    if challenges_done[i] == '1':
-                        points += chall_points[i]
-                # add every user to ranking at position 0
-                # after sorting we'll update the positions
-                ranking.append({'position' : 0, 'username': user.username, 
-                                'points': points, 
-                                'last_capture': user.last_capture}
-                              )
-
-        # Sort according to user level and last capture,
+        # Sort according to user points and last capture,
         # descending and ascending, respectively.
         ranking.sort(key=lambda item: (-item['points'], item['last_capture']))
 
