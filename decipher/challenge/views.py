@@ -243,8 +243,6 @@ class RankingView(LoginRequiredMixin, View):
         users = User.objects.filter(is_staff=False)
         ranking = users.order_by('-points', 'last_capture')
 
-        print(ranking)
-
         return render(request, self.template_name, {'ranking': ranking})
 
 
