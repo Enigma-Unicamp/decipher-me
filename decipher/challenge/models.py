@@ -15,7 +15,7 @@ class User(AbstractUser):
     challenges_done = models.TextField(default=initial_val)
 
     # points that user got
-    points = models.PositiveIntegerField()
+    points = models.PositiveIntegerField(default=0)
 
     # ranking tiebreaker
     last_capture = models.DateTimeField(default=None, null=True, blank=True) 
