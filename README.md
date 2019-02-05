@@ -87,15 +87,6 @@ edit `decipher-me/decipher/decipher/settings.py`, replacing
 `SEQUENTIAL_CHALLENGES = False` with `SEQUENTIAL_CHALLENGES = True`, if you want
 to have <b>sequential challenges</b>.
 
-After that, you'll have to navigate to `decipher-me/decipher` and enter the
-following commands, in order to remake the database.
-
-```
-$ rm db.sqlite3
-$ python3 manage.py makemigrations
-$ python3 manage.py migrate
-```
-
 ### Password recovery module
 
 First of all, create a new Gmail user. Then, navigate to
@@ -118,11 +109,8 @@ recovery module, because your email password is stored unencrypted.
 
 ### Adding your challenges
 
-First of all, lets set the amount of challenges you're going to add. Edit
-`decipher-me/decipher/decipher/settings.py`, replacing `NUMBER_OF_CHALLENGES =
-3` with the correct number. After that, edit the file
-`scripts/settings.csv`. For each one of your challenges, you must add a new line
-like this:
+First of all, edit the file `scripts/settings.csv`. For each one of your
+challenges, you must add a new line like this:
 
 ```
 challenge_title,content_type,challenge_flag,challenge_description,challenge_points
@@ -133,8 +121,7 @@ challenge_title,content_type,challenge_flag,challenge_description,challenge_poin
 * `challenge_flag`: is the flag and must be in the following shape: `decipher{something}`
 * `challenge_description`: challenge body text
 * `challenge_points`: how many points a user receives for solving this challenge
-(this is ignored if `SEQUENTIAL_CHALLENGES = True`, so just set it to "1" if
-that's the case)
+(if you have `SEQUENTIAL_CHALLENGES = True`, please set it to "1")
 
 **Atention!** The order of the challenges in this file is the one that will be
 used.

@@ -10,40 +10,23 @@
 
         {% if challenges %}
 
-            {% if sequential == True %}
-                {% for chall in challenges %}
-                    <form action="{% url 'challenge:challenge' %}" method="post">
-                        {% csrf_token %}
-                        {% if chall.id_chall == user.level %}
-                            <i class="material-icons" style="vertical-align: middle">lock</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn">
-                        {% elif chall.id_chall > user.level %}
-                            <i class="material-icons" style="vertical-align: middle">lock</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn" disabled>
-                        {% else %}
-                            <i class="material-icons" style="vertical-align: middle">lock_open</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn">
-                        {% endif %}
-                        <input name="id_chall" type="hidden" value={{ chall.id_chall }}>
-                    </form><br/>
-                {% endfor %}
+          {% for chall in challenges %}
+              <form action="{% url 'challenge:challenge' %}" method="post">
+                  {% csrf_token %}
+                  {% if chall.is_done == '1' %}
+                    <i class="material-icons" style="vertical-align: middle">lock_open</i>
+                    <input type="submit" value="{{ chall.title }}" class="btn">
+                  {% elif chall.is_done == '0' and chall.locked == '1'  %}
+                    <i class="material-icons" style="vertical-align: middle">lock</i>
+                    <input type="submit" value="{{ chall.title }}" class="btn" disabled>
+                  {% else %}
+                    <i class="material-icons" style="vertical-align: middle">lock</i>
+                    <input type="submit" value="{{ chall.title }}" class="btn">
+                  {% endif %}
+                  <input name="id_chall" type="hidden" value={{ chall.id_chall }}>
+              </form><br/>
+          {% endfor %}
 
-            {% else %}
-                {% for chall in challenges %}
-                    <form action="{% url 'challenge:challenge' %}" method="post">
-                        {% csrf_token %}
-                        {% if chall.is_done == '1' %}
-                            <i class="material-icons" style="vertical-align: middle">lock_open</i>
-                            <input type="submit" value="{{ chall.title }}: {{ chall.points }} point(s)" class="btn">
-                        {% else %}
-                            <i class="material-icons" style="vertical-align: middle">lock</i>
-                            <input type="submit" value="{{ chall.title }}: {{ chall.points }} point(s)" class="btn">
-                        {% endif %}
-                        <input name="id_chall" type="hidden" value={{ chall.id_chall }}>
-                    </form><br/>
-                {% endfor %}
-            {% endif %}
-            
         {% else %}
             We still don't have any challenges. Come back soon.
         {% endif %}
