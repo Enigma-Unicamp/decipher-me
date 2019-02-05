@@ -11,42 +11,83 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-
-    <title> {% block title %}{% endblock %} </title>
-
-    {% block scripts %}{% endblock %}
+    <!-- Our own js file -->
+    <script src="{% static "js/base.js" %}"></script>
 
   </head>
 
   <body style="margin-bottom: 50pt; height: 100%; overflow-y: scroll">
 
-    <div id="nav-menu">
-      <ul>
-        {% block menu_items %}
+    {% block menu_items %}
 
-          <li class="active"><a href="{% url 'challenge:home' %}">Home</a></li>
-          <li class="active"><a href="{% url 'challenge:rules' %}">Rules</a></li>
+      <nav>
+        <div class="nav-wrapper">
 
-          {% if request.user.is_authenticated %}
-            <li class="active"><a href="{% url 'challenge:ranking' %}">Ranking</a></li>
-            <li class="active" style="float:right"><a href="{% url 'challenge:logout' %}">Logout</a></li>
-            <li class="active" style="float:right"><a href="{% url 'challenge:password_change' %}">Password change</a></li>
-          {% else %}
-            <li class="active" style="float:right"><a href="{% url 'challenge:register' %}">Register</a></li>
-            <li class="active" style="float:right"><a href="{% url 'challenge:login' %}">Login</a></li>
+          <!-- Dropdown menu options (show on dropdown trigger) -->
+          <ul class="dropdown-content" id="dropdown" >
+            <li class="menu-item"><a href="{% url 'challenge:password_change' %}">Password change</a></li>
+            <li class="divider"></li>
+            <li class="menu-item"><a href="{% url 'challenge:logout' %}">Logout</a></li>
+          </ul>
 
-          {% endif %}
+          <!-- Navbar menu options -->
+          <ul>
 
-        {% endblock %}
-      </ul>
-    </div>
+            <!-- Always show options -->
+            <li>
+              <a class="nav-item" href="{% url 'challenge:home' %}">
+                Home
+              <i class="material-icons left">home</i>
+              </a>
+            </li>
+            <li>
+              <a class="nav-item" href="{% url 'challenge:rules' %}">
+                Rules
+                <i class="material-icons left">comment</i>
+              </a>                
+            </li>
+
+            <!-- Authenticated user options -->
+            {% if request.user.is_authenticated %}
+              <li>
+                <a class="nav-item" href="{% url 'challenge:ranking' %}">
+                  Ranking
+                  <i class="material-icons left">star</i>
+                </a>                
+              </li>
+              <!-- Dropdown Menu Trigger Button -->
+              <li class="right hide-on-med-and-down">
+                <a href="#!" class="dropdown-trigger nav-item" id="dropdown-trigger" data-target="dropdown">
+                  Account Settings
+                  <i class="material-icons left" id="dropdown-icon">
+                    account_circle
+                  </i>
+                </a>
+              </li>
+
+            <!-- Not authenticated user options -->
+            {% else %}
+              <li style="float:right">
+                <a class="nav-item" href="{% url 'challenge:register' %}">
+                  Register
+                  <i class="material-icons left">group_add</i>
+                </a>                
+              </li>
+              <li style="float:right">
+                <a class="nav-item" href="{% url 'challenge:login' %}">
+                  Login
+                  <i class="material-icons left">account_circle</i>
+                </a>                
+              </li>
+            {% endif %}
+
+          </ul>
+        </div>
+      </nav>
+    {% endblock %}
 
     <div id="main_content" class="container">
       {% block content %}{% endblock %}
-    </div>
-
-    <div id="nav-bottom">
-      <p>Decipher - TODO: add GitLab icon</p>
     </div>
 
   </body>

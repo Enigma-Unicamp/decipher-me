@@ -1,43 +1,21 @@
 html *{
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
-#nav-menu ul{
-  position: fixed;
-  top: 0;
-  height: 75px;
-  width: 100%;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: black;
+nav{
+  background-color: transparent !important;
 }
 
-#nav-menu li{
-  height: 100%;
-  float: left;
+.nav-wrapper {
+  background: rgba(0,0,0,0.8);
 }
 
-#nav-menu {
-    height: 75px;
+nav ul li:hover {
+   background-color: rgba(38,166,154,0.8);
 }
 
-#nav-menu li a{
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 30px 0;
-  width: 100px;
-  text-decoration: none;
-}
-
-#nav-menu li a:hover{
-  background-color: green;
-}
-
-.active-nav {
-  background-color: gray;
+.nav-item {
+  color: rgba(255,255,255,1);
 }
 
 #nav-bottom{
@@ -58,7 +36,7 @@ html *{
 }
 
 .success-message{
-  color: rgba(82, 187, 37, 0.8);
+  color: rgba(82,187,37,0.8);
   font-weight: bold;
   font-size: small;
 }
@@ -67,7 +45,4 @@ html *{
   color: rgba(255,0,0,0.8);
   font-weight: bold;
   font-size: small;
-}
-
-#main-content{
 }
