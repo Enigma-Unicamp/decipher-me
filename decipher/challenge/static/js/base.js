@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.sidenav');
+  var options = {
+  }
+  var instances = M.Sidenav.init(elems, options);
+});
+
 // dropdown menu close with outside click
 document.addEventListener('click', function(e) {
 

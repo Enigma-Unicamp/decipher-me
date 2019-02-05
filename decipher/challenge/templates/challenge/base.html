@@ -23,15 +23,15 @@
       <nav>
         <div class="nav-wrapper">
 
-          <!-- Dropdown menu options (show on dropdown trigger) -->
+          <!-- Desktop dropdown menu options (show on dropdown trigger) -->
           <ul class="dropdown-content" id="dropdown" >
             <li class="menu-item"><a href="{% url 'challenge:password_change' %}">Password change</a></li>
             <li class="divider"></li>
             <li class="menu-item"><a href="{% url 'challenge:logout' %}">Logout</a></li>
           </ul>
 
-          <!-- Navbar menu options -->
-          <ul>
+          <!-- Desktop navbar menu options -->
+          <ul class="hide-on-med-and-down">
 
             <!-- Always show options -->
             <li>
@@ -82,8 +82,71 @@
             {% endif %}
 
           </ul>
+
+          <!--  Sidebar Menu Trigger Button (only show on small screens) -->
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger">
+            <i class="material-icons">menu</i>
+          </a>
+
         </div>
       </nav>
+
+      <!-- Mobile sidebar menu options (show on sidebar trigger) -->
+      <ul class="sidenav" id="mobile-demo">
+
+        <!-- Always show options -->
+        <li>
+          <a href="{% url 'challenge:home' %}">
+            Home
+            <i class="material-icons left">home</i>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'challenge:rules' %}">
+            Rules
+            <i class="material-icons left">comment</i>
+          </a>                
+        </li>
+
+        <!-- Authenticated user options -->
+        {% if request.user.is_authenticated %}
+          <li>
+            <a href="{% url 'challenge:ranking' %}">
+              Ranking
+              <i class="material-icons left">star</i>
+            </a>                
+          </li>
+          <li>
+            <a href="{% url 'challenge:password_change' %}">
+              Password change
+              <i class="material-icons left">edit</i>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'challenge:logout' %}">
+              Logout
+              <i class="material-icons left">exit_to_app</i>
+            </a>
+          </li>
+
+        <!-- Not authenticated user options -->
+        {% else %}
+          <li>
+            <a href="{% url 'challenge:register' %}">
+              Register
+              <i class="material-icons left">group_add</i>
+            </a>                
+          </li>
+          <li>
+            <a href="{% url 'challenge:login' %}">
+              Login
+              <i class="material-icons left">account_circle</i>
+            </a>                
+          </li>
+        {% endif %}
+
+      </ul>
+
     {% endblock %}
 
     <div id="main_content" class="container">
