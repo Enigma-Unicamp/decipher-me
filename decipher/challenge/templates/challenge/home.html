@@ -1,5 +1,9 @@
 {% extends 'challenge/base.html' %}
-{% block title %}Home{% endblock %}
+
+{% block title %}
+  Home
+{% endblock %}
+
 {% block content %}
 
     {% if request.user.is_authenticated %}
@@ -38,6 +42,5 @@
         </h4>
 
     {% endif %}
-
 
 {% endblock %}
