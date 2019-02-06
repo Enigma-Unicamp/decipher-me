@@ -1,7 +1,7 @@
+"use strict";
+
 // dropdown menu
 document.addEventListener('DOMContentLoaded', function() {
-
-  "use strict";
 
   var elems = document.querySelectorAll('.dropdown-trigger');
   var options = {
@@ -20,8 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // mobile menu
 document.addEventListener('DOMContentLoaded', function() {
 
-  "use strict";
-
   var elems = document.querySelectorAll('.sidenav');
   var options = {
     edge: 'right'
@@ -32,8 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // dropdown menu close with outside click
 document.addEventListener('click', function(e) {
-
-  "use strict";
 
   // if it's the dropdown menu being clicked
   // we shouldn't hide anything
