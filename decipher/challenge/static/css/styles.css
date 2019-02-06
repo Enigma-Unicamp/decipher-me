@@ -64,3 +64,7 @@ nav ul li:hover {
   margin-right: auto;
 }
 
+.divider {
+  margin-top: 0px !important;
+}
+
