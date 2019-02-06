@@ -92,16 +92,6 @@ class RegisterForm(forms.ModelForm):
                 forms.ValidationError("This email address is already in use.")
             )
 
-        # check if username size is ok
-        user_min_length = 6
-        if len(username) < user_min_length:
-            self.add_error(
-                'username',
-                forms.ValidationError("This username is too short. It must " +
-                                      "contain at least %d characters." 
-                                      %  user_min_length)
-            )
-
         return cleaned_data
 
 
