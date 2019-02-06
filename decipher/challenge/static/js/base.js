@@ -1,6 +1,8 @@
 // dropdown menu
 document.addEventListener('DOMContentLoaded', function() {
 
+  "use strict";
+
   var elems = document.querySelectorAll('.dropdown-trigger');
   var options = {
     inDuration: 300,
@@ -15,7 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// mobile menu
 document.addEventListener('DOMContentLoaded', function() {
+
+  "use strict";
+
   var elems = document.querySelectorAll('.sidenav');
   var options = {
     edge: 'right'
@@ -23,8 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
   var instances = M.Sidenav.init(elems, options);
 });
 
+
 // dropdown menu close with outside click
 document.addEventListener('click', function(e) {
+
+  "use strict";
 
   // if it's the dropdown menu being clicked
   // we shouldn't hide anything
@@ -32,6 +41,7 @@ document.addEventListener('click', function(e) {
   if (e.target !== icon) {
 
     var dropdown = document.querySelectorAll('.dropdown-trigger');
+    var i;
     for (i=0; i<dropdown.length; i++) {
 
       // if none the icon or the menu is being clicked,
