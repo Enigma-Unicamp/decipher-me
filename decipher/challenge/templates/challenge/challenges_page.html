@@ -1,0 +1,41 @@
+{% extends 'challenge/base.html' %}
+{% load static %}
+
+{% block title %}
+  Challenges
+{% endblock %}
+
+{% block content %}
+
+    {% if request.user.is_authenticated %}
+
+        <h4 style="margin-bottom:30pt">
+            Challenges
+        </h4>
+
+        {% if challenges %}
+
+          {% for chall in challenges %}
+              <form action="{% url 'challenge:challenge' %}" method="post">
+                  {% csrf_token %}
+                  {% if chall.is_done == '1' %}
+                    <i class="material-icons" style="vertical-align: middle">lock_open</i>
+                    <input type="submit" value="{{ chall.title }}" class="btn">
+                  {% elif chall.is_done == '0' and chall.locked == '1'  %}
+                    <i class="material-icons" style="vertical-align: middle">lock</i>
+                    <input type="submit" value="{{ chall.title }}" class="btn" disabled>
+                  {% else %}
+                    <i class="material-icons" style="vertical-align: middle">lock</i>
+                    <input type="submit" value="{{ chall.title }}" class="btn">
+                  {% endif %}
+                  <input name="id_chall" type="hidden" value={{ chall.id_chall }}>
+              </form><br/>
+          {% endfor %}
+
+        {% else %}
+            We still don't have any challenges. Come back soon.
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}

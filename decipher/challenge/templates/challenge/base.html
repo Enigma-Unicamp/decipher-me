@@ -40,21 +40,28 @@
               <i class="material-icons left">home</i>
               </a>
             </li>
-            <li>
-              <a class="nav-item" href="{% url 'challenge:rules' %}">
-                Rules
-                <i class="material-icons left">comment</i>
-              </a>                
-            </li>
 
             <!-- Authenticated user options -->
             {% if request.user.is_authenticated %}
+              <li>
+                <a class="nav-item" href="{% url 'challenge:rules' %}">
+                  Rules
+                  <i class="material-icons left">comment</i>
+                </a>                
+              </li>
+              <li>
+                <a class="nav-item" href="{% url 'challenge:challenges_page' %}">
+                  Challenges
+                  <i class="material-icons left">extension</i>
+                </a>                
+              </li>
               <li>
                 <a class="nav-item" href="{% url 'challenge:ranking' %}">
                   Ranking
                   <i class="material-icons left">star</i>
                 </a>                
               </li>
+
               <!-- Dropdown Menu Trigger Button -->
               <li class="right hide-on-med-and-down">
                 <a href="#!" class="dropdown-trigger nav-item" id="dropdown-trigger" data-target="dropdown">
@@ -101,21 +108,28 @@
             <i class="material-icons left">home</i>
           </a>
         </li>
-        <li>
-          <a href="{% url 'challenge:rules' %}">
-            Rules
-            <i class="material-icons left">comment</i>
-          </a>                
-        </li>
 
         <!-- Authenticated user options -->
         {% if request.user.is_authenticated %}
+          <li>
+            <a href="{% url 'challenge:rules' %}">
+              Rules
+              <i class="material-icons left">comment</i>
+            </a>                
+          </li>
+          <li>
+            <a href="{% url 'challenge:challenges_page' %}">
+              Challenges
+              <i class="material-icons left">extension</i>
+            </a>                
+          </li>
           <li>
             <a href="{% url 'challenge:ranking' %}">
               Ranking
               <i class="material-icons left">star</i>
             </a>                
           </li>
+          <li class="divider"></li>
           <li>
             <a href="{% url 'challenge:password_change' %}">
               Password change
@@ -131,6 +145,7 @@
 
         <!-- Not authenticated user options -->
         {% else %}
+          <li class="divider" style"margin:0px !important"></li>
           <li>
             <a href="{% url 'challenge:register' %}">
               Register

@@ -30,6 +30,12 @@ class HomeView(TemplateView):
 
     template_name = 'challenge/home.html'
 
+
+
+class ChallengesPageView(LoginRequiredMixin, View):
+
+    template_name = 'challenge/challenges_page.html'
+
     def get(self, request, *args, **kwargs):
 
         # if authenticated, pass the challenges to the template
@@ -137,7 +143,7 @@ class ChallengeView(LoginRequiredMixin, View):
                 request.user.last_capture = datetime.now(tz=timezone.utc)
                 request.user.save()
 
-            return redirect('challenge:home')
+            return redirect('challenge:challenges_page')
 
         # flag is incorret
         else:
@@ -148,7 +154,7 @@ class ChallengeView(LoginRequiredMixin, View):
 
 
 
-class RulesView(TemplateView):
+class RulesView(LoginRequiredMixin, TemplateView):
 
     template_name = 'challenge/rules.html'
 
