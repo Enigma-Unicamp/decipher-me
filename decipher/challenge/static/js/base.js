@@ -1,0 +1,55 @@
+// dropdown menu
+document.addEventListener('DOMContentLoaded', function() {
+
+  "use strict";
+
+  var elems = document.querySelectorAll('.dropdown-trigger');
+  var options = {
+    inDuration: 300,
+    outDuration: 0,
+    constrain_width: false,
+    hover: false,
+    gutter: 0,
+    coverTrigger: false,
+    alignment: 'left'
+  }
+  var instances = M.Dropdown.init(elems, options);
+});
+
+
+// mobile menu
+document.addEventListener('DOMContentLoaded', function() {
+
+  "use strict";
+
+  var elems = document.querySelectorAll('.sidenav');
+  var options = {
+    edge: 'right'
+  }
+  var instances = M.Sidenav.init(elems, options);
+});
+
+
+// dropdown menu close with outside click
+document.addEventListener('click', function(e) {
+
+  "use strict";
+
+  // if it's the dropdown menu being clicked
+  // we shouldn't hide anything
+  var icon = document.getElementById('dropdown-icon');
+  if (e.target !== icon) {
+
+    var dropdown = document.querySelectorAll('.dropdown-trigger');
+    var i;
+    for (i=0; i<dropdown.length; i++) {
+
+      // if none the icon or the menu is being clicked,
+      // close all dropdown menus
+      if (! dropdown[i].isEqualNode(e.target)) {
+        var instance = M.Dropdown.getInstance(dropdown[i]);
+        instance.close();
+      }
+    }
+  }
+});
