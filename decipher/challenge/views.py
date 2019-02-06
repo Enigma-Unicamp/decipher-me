@@ -195,7 +195,6 @@ class RegisterView(TemplateView):
             User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'],
-                first_name=form.cleaned_data['first_name'],
                 email=form.cleaned_data['email'],
                 points=0,
                 last_capture=datetime.now(tz=timezone.utc),

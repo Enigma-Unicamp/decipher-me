@@ -67,22 +67,16 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'first_name',
-            'last_name',
             'email',
             'username',
             'password',
         ]
         help_texts = {
-            'first_name': 'first name',
-            'last_name': 'last name',
             'email': 'email',
             'username': 'username',
             'password': 'password',
         }
         labels = {
-            'first_name': 'first name',
-            'last_name': 'last name',
             'email': 'email',
             'username': 'username',
             'password': 'password',
@@ -116,16 +110,6 @@ class RegisterForm(forms.ModelForm):
             self.add_error(
                 'email',
                 forms.ValidationError("This email address is already in use.")
-            )
-
-        # check if username size is ok
-        user_min_length = 6
-        if len(username) < user_min_length:
-            self.add_error(
-                'username',
-                forms.ValidationError("This username is too short. It must " +
-                                      "contain at least %d characters." 
-                                      %  user_min_length)
             )
 
         return cleaned_data
