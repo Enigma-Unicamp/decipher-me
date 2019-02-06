@@ -47,22 +47,16 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'first_name',
-            'last_name',
             'email',
             'username',
             'password',
         ]
         help_texts = {
-            'first_name': 'first name',
-            'last_name': 'last name',
             'email': 'email',
             'username': 'username',
             'password': 'password',
         }
         labels = {
-            'first_name': 'first name',
-            'last_name': 'last name',
             'email': 'email',
             'username': 'username',
             'password': 'password',
