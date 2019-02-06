@@ -3,9 +3,29 @@ Decipher challenge forms
 '''
 
 from django import forms
-from .models import User
+from .models import User, Challenge
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.forms import SetPasswordForm
+
+
+
+class ChallengeForm(forms.ModelForm):
+
+    class Meta:
+        model = Challenge
+        fields = [
+            'flag',
+        ]
+        help_texts = {
+            'flag': 'flag',
+        }
+        labels = {
+            'flag': 'flag',
+        }
+        widgets = {
+            'flag': forms.TextInput(attrs={ 'placeholder': 'decipher{flag}' })
+        }
+
 
 
 class LoginForm(forms.Form):

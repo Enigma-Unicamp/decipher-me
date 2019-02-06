@@ -91,13 +91,16 @@ class ChallengesPageView(LoginRequiredMixin, View):
 class ChallengeView(LoginRequiredMixin, View):
 
     template_name = 'challenge/challenge.html'
+    form_class = forms.ChallengeForm
 
     def post(self, request, *args, **kwargs):
 
+        form = self.form_class(request.POST)
+
         chall = get_object_or_404(
-            Challenge,
-            id_chall=request.POST['id_chall']
-            )
+                  Challenge,
+                  id_chall=request.POST['id_chall']
+                )
 
         # challenges done by user
         challenges_done = json.loads(request.user.challenges_done)
@@ -108,49 +111,54 @@ class ChallengeView(LoginRequiredMixin, View):
                 if challenges_done[chall.id_chall - 1] == '0':
                     return redirect('challenge:index')
 
+        # 'link type challenge', so open the link file to
+        # pass the link to template
+        if chall.type_chall == 'link':
+            file_path = "challenge/static/" + chall.file_content
+            file_object = open(file_path, 'r')
+            link = file_object.read()
+        else:
+            link = None
+
         # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
+            return render(
+                request, self.template_name,
+                {'link' : link, 'challenge' : chall, 'form' : form }
+            )
 
-            # 'link type challenge', so open the link file to
-            # pass the link to template
-            if chall.type_chall == 'link':
-                file_path = "challenge/static/" + chall.file_content
-                file_object = open(file_path, 'r')
-                link = file_object.read()
-                return render(
-                          request, self.template_name,
-                          {'link' : link, 'challenge' : chall }
-                          )
+        # if it has the 'flag', check if it's a resubmission
+        if challenges_done[chall.id_chall] == '1':
+            error_message = "You have already completed this challenge."
 
-            # other types of challenges
-            return render(request, self.template_name, { 'challenge' : chall })
+        # otherwise let's check if the flag is correct
+        else:
+            flag = request.POST['flag']
+            hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
 
-        # if it has the 'flag', check if it's correct
-        flag = request.POST['flag']
-        hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
+            # pattern to verify regex
+            pattern = re.compile("decipher{+[\x21-\x7E]+}$")
 
-        # pattern to verify regex
-        pattern = re.compile("decipher{+[\x21-\x7E]+}$")
+            # flag is correct
+            if pattern.match(flag) and hash_flag == chall.flag:
 
-        # flag is correct
-        if pattern.match(flag) and hash_flag == chall.flag:
-
-            # if it's not a flag resubmission, accept it
-            if challenges_done[chall.id_chall] != '1':
                 challenges_done[chall.id_chall] = '1'
                 request.user.challenges_done = json.dumps(challenges_done)
                 request.user.points += chall.points
                 request.user.last_capture = datetime.now(tz=timezone.utc)
                 request.user.save()
 
-            return redirect('challenge:challenges_page')
+                return redirect('challenge:challenges_page')
 
-        # flag is incorret
-        else:
-            return render(
-                request, self.template_name,
-                {'wrong_flag' : True, 'challenge': chall}
-                )
+            # otherwise warn the user that the flag is wrong
+            else:
+                error_message = "Wrong flag :("
+
+        return render(
+            request, self.template_name,
+            { 'error_message' : error_message, 'link' : link, 
+              'challenge': chall, 'form' : form }
+        )
 
 
 
