@@ -14,8 +14,11 @@
     <!-- Our own js file -->
     <script src="{% static "js/base.js" %}"></script>
 
-    <link rel='shortcut icon' type='image/x-icon' href="{% static "assets/favicon.ico" %}"/>
+    <!-- Control layout on mobile browsers -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Favicon and page title -->
+    <link rel='shortcut icon' type='image/x-icon' href="{% static "assets/favicon.ico" %}"/>
     <title> {% block title %}{% endblock %} </title>
 
   </head>
