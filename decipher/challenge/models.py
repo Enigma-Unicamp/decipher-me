@@ -29,6 +29,7 @@ class Challenge(models.Model):
     type_chall   = models.CharField(max_length=20)
     file_content = models.TextField()
     description  = models.TextField()
-    points       = models.PositiveIntegerField()
+    points       = models.PositiveIntegerField(default=0)
     flag         = models.CharField(max_length=200)
+    solved_by    = models.PositiveIntegerField(default=0)
 
