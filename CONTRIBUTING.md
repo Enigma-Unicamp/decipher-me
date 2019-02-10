@@ -6,7 +6,7 @@ There are several ways to do so:
 
 - [Reporting a bug or requesting a feature](https://gitlab.com/enigmaster/decipher-me/issues/new)
 - [Solving an existent issue](https://gitlab.com/enigmaster/decipher-me/issues)
-(the issues marked if "Good first issue" are a good point to start).
+(issues marked with "Good first issue" are a good point to start).
 - Enhancing our code quality, adding unit test or improving our documentation.
 
 Please, read all the
