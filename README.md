@@ -136,14 +136,13 @@ To examplify, we have three challenges (`Baby Steps`, `Test Challenge` and
 ```
 
 After that, create the folder `decipher-me/decipher/scripts/challenges_files`
-and create folders with the same titles of each one of the challenges. Inside
-this folders, we must add the content files. If the `content_type` is a
-<b>image</b> or a <b>downloadable file</b>, you should just drop it inside the
-folder. If it's a <b>link</b>, you should add a `.txt` file containing the
-link. Finally, if it's a <b>page</b>, you should add the `.html` file (and
-others that may be necessary, like `.js` files). The name of those files doesn't
-matter to us, cause we'll rename them.
-
+and create folders with the **same titles of each one of the
+challenges**. Inside this folders, we must add the content files. If the
+`content_type` is a <b>image</b> or a <b>downloadable file</b>, you should just
+drop it inside the folder. If it's a <b>link</b>, you should add a `.txt` file
+containing the link. Finally, if it's a <b>page</b>, you should add the `.html`
+file (and others that may be necessary, like `.js` files). The name of these
+files doesn't matter to us, it can be whatever you want.
 
 After adding all the challenges, navigate to the folder
 `decipher-me/decipher` and run the following commands:
