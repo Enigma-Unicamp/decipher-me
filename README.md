@@ -154,11 +154,6 @@ $ python3 migrate
 $ python3 manage.py shell < scripts/create_challenges.py
 ```
 
-
-## Contributing
-
-TODO
-
 ## License
 
 This project is licensed under the
