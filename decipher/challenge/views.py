@@ -47,6 +47,19 @@ class ChallengesPageView(LoginRequiredMixin, View):
             # and info that says if user has done ir ot not
             challenges_done = json.loads(request.user.challenges_done)
 
+            # total number of users
+            n_users = len(User.objects.all())
+
+            # if there's at least one user, compute percentage
+            if n_users > 0:
+                for i in range(0, len(challs)):
+                    challs[i]['solved_by'] = challs[i]['solved_by'] / n_users
+                    challs[i]['solved_by'] *= 100
+            # if there's no user, just set it to zero
+            else:
+                for i in range(0, len(challs)):
+                    challs[i]['solved_by'] = 0
+
             if settings.SEQUENTIAL_CHALLENGES:
 
                 # for sequential challenges, challenge 0 may be done or
@@ -146,7 +159,9 @@ class ChallengeView(LoginRequiredMixin, View):
                 request.user.challenges_done = json.dumps(challenges_done)
                 request.user.points += chall.points
                 request.user.last_capture = datetime.now(tz=timezone.utc)
+                chall.solved_by += 1
                 request.user.save()
+                chall.save()
 
                 return redirect('challenge:challenges_page')
 

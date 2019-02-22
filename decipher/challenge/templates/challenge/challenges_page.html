@@ -15,22 +15,52 @@
 
         {% if challenges %}
 
-          {% for chall in challenges %}
-              <form action="{% url 'challenge:challenge' %}" method="post">
-                  {% csrf_token %}
-                  {% if chall.is_done == '1' %}
-                    <i class="material-icons" style="vertical-align: middle">lock_open</i>
-                    <input type="submit" value="{{ chall.title }}" class="btn">
-                  {% elif chall.is_done == '0' and chall.locked == '1'  %}
-                    <i class="material-icons" style="vertical-align: middle">lock</i>
-                    <input type="submit" value="{{ chall.title }}" class="btn" disabled>
-                  {% else %}
-                    <i class="material-icons" style="vertical-align: middle">lock</i>
-                    <input type="submit" value="{{ chall.title }}" class="btn">
-                  {% endif %}
-                  <input name="id_chall" type="hidden" value="{{ chall.id_chall }}">
-              </form><br/>
-          {% endfor %}
+          <table style="table-layout:fixed">
+
+            <tr>
+              <th style="text-align:center"> Name </th>
+              <th style="text-align:center"> Points </th>
+              <th style="text-align:center"> Solved by </th>
+            </tr>
+
+            {% for chall in challenges %}
+              <tr>
+                <form action="{% url 'challenge:challenge' %}" method="post">
+
+                    {% csrf_token %}
+
+                    {% if chall.is_done == '1' %}
+                      <td style="text-align:center; overflow:hidden">
+                        <i class="material-icons" style="vertical-align: middle">lock_open</i>
+                        <input type="submit" value="{{ chall.title }}" class="btn chall_name">
+                      </td>
+                    {% elif chall.is_done == '0' and chall.locked == '1'  %}
+                      <td style="text-align:center; overflow:hidden">
+                       <i class="material-icons" style="vertical-align: middle">lock</i>
+                       <input type="submit" value="{{ chall.title }}" class="btn chall_name" disabled>
+                      </td>
+                    {% else %}
+                      <td style="text-align:center; overflow:hidden">
+                        <i class="material-icons" style="vertical-align: middle">lock</i>
+                        <input type="submit" value="{{ chall.title }}" class="btn chall_name">
+                      </td>
+                    {% endif %}
+
+                    <td style="text-align:center; overflow:hidden">
+                      <div class="chall_points"> {{ chall.points }} </div>
+                    </td>
+                    <td style="text-align:center; overflow:hidden">
+                      {{ chall.solved_by|floatformat:0 }}% users
+                    </td>
+
+                    <input name="id_chall" type="hidden" value="{{ chall.id_chall }}">
+
+                </form>
+
+              </tr>
+            {% endfor %}
+
+          </table>
 
         {% else %}
             We still don't have any challenges. Come back soon.
