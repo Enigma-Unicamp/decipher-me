@@ -133,6 +133,17 @@ class ChallengeView(LoginRequiredMixin, View):
         else:
             link = None
 
+        # total number of users
+        n_users = len(User.objects.all())
+
+        # percentage of users that solved this challenged
+        if n_users > 0:
+            chall.solved_by = chall.solved_by / n_users
+            chall.solved_by *= 100
+        # if there's no user, just set it to zero
+        else:
+            chall.solved_by = 0
+
         # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
             return render(

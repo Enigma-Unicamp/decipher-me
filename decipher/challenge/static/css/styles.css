@@ -54,6 +54,15 @@ nav ul li:hover {
   font-size: small;
 }
 
+.chall-description{
+  color: rgba(0,0,0,0.7);
+}
+
+.chall-points-solved-by{
+  font-size:small;
+  font-weight:bold;
+}
+
 .home-image{
   width: 15%;
   height: 15%;
@@ -74,5 +83,3 @@ nav ul li:hover {
   width: 250px;
   display: inline-block;
 }
-
-
