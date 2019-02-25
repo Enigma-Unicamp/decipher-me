@@ -73,13 +73,29 @@ nav ul li:hover {
   margin-right: auto;
 }
 
-.divider {
+.divider{
   margin-top: 0px !important;
 }
 
-.chall_name {
+.chall-name{
   text-overflow: ellipsis;
   overflow: hidden;
   width: 250px;
   display: inline-block;
+}
+
+.chall-points{
+  margin-top:10px;
+  margin-left:40px;
+  font-size:small;
+  font-weight:bold;
+  color:rgba(0,0,0,0.7);
+}
+
+.chall-solved-by{
+  margin-bottom:30px;
+  margin-left:40px;
+  font-size:small;
+  font-weight:bold;
+  color:rgba(0,0,0,0.7);
 }
