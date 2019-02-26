@@ -3,12 +3,17 @@
 {% block title %} {{ challenge.title }} {% endblock %}
 {% block content %}
 
-    <h4 style="margin-bottom:30pt">
+    <h4 style="margin-bottom:15pt">
         {{ challenge.title }}
     </h4>
 
+    <div style="margin-bottom:30pt" class="chall-points-solved-by">
+      Points for solving: {{ challenge.points }} </br>
+      Solved by: {{ challenge.solved_by|floatformat:0 }}% users </p>
+    </div>
+
     {% autoescape off %}
-        <div style="margin-bottom:30pt">
+        <div style="margin-bottom:30pt" class="chall-description">
             {{ challenge.description }}
         </div>
     {% endautoescape %}
