@@ -87,15 +87,6 @@ edit `decipher-me/decipher/decipher/settings.py`, replacing
 `SEQUENTIAL_CHALLENGES = False` with `SEQUENTIAL_CHALLENGES = True`, if you want
 to have <b>sequential challenges</b>.
 
-After that, you'll have to navigate to `decipher-me/decipher` and enter the
-following commands, in order to remake the database.
-
-```
-$ rm db.sqlite3
-$ python3 manage.py makemigrations
-$ python3 manage.py migrate
-```
-
 ### Password recovery module
 
 First of all, create a new Gmail user. Then, navigate to
@@ -118,38 +109,40 @@ recovery module, because your email password is stored unencrypted.
 
 ### Adding your challenges
 
-To add your own challenges, edit the file `scripts/settings.csv`. For each one
-of your challenges, you must add a new line like this:
+First of all, edit the file `scripts/settings.csv`. For each one of your
+challenges, you must add a new line like this:
 
 ```
-challenge_title,content_type,challenge_flag,challenge_description
+challenge_title,content_type,challenge_flag,challenge_description,challenge_points
 ```
 
-* `challenge_title` is the title of the challenge
-* `content_type` must be "download", "image", "link" or "page"
-* `challenge_flag` is the flag and must be in the following shape: `decipher{something}`
-* `challenge_description` is the challenge body text
+* `challenge_title`: title of the challenge
+* `content_type`: must be "download", "image", "link" or "page"
+* `challenge_flag`: is the flag and must be in the following shape: `decipher{something}`
+* `challenge_description`: challenge body text
+* `challenge_points`: how many points a user receives for solving this challenge
+(if you have `SEQUENTIAL_CHALLENGES = True`, please set it to "1")
+
+**Atention!** The order of the challenges in this file is the one that will be
+used.
 
 To examplify, we have three challenges (`Baby Steps`, `Test Challenge` and
 `Another Test`), so our file stays like this:
 
 ```
-"Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps"
-"Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify"
-"Another Test","page","decipher{n3wfl4g}","Another challenge, just to examplify"
+"Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps","1"
+"Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify","1"
+"Another Test","page","decipher{n3wfl4g}","Another challenge, just to examplify","1"
 ```
 
-**Atention!** The order of the challenges in this file is the one that will be
-used.
-
-After that, create the folder `decipher-me/decipher/scripts/challenges_files` and create
-folders <b>with the same titles of each one of the challenges</b>. Inside this folders, we must
-add the content files. If the `content_type` is a <b>image</b> or a
-<b>downloadable file</b>, you should just drop it inside the folder. If it's a
-<b>link</b>, you should add a `.txt` file containing the link. Finally, if it's
-a <b>page</b>, you should add the `.html` file (and others that may be
-necessary, like `.js` files). The name of those files doesn't matter to us, cause we'll rename
-them.
+After that, create the folder `decipher-me/decipher/scripts/challenges_files`
+and create folders with the **same titles of each one of the
+challenges**. Inside this folders, we must add the content files. If the
+`content_type` is a <b>image</b> or a <b>downloadable file</b>, you should just
+drop it inside the folder. If it's a <b>link</b>, you should add a `.txt` file
+containing the link. Finally, if it's a <b>page</b>, you should add the `.html`
+file (and others that may be necessary, like `.js` files). The name of these
+files doesn't matter to us, it can be whatever you want.
 
 After adding all the challenges, navigate to the folder
 `decipher-me/decipher` and run the following commands:
@@ -159,11 +152,6 @@ $ rm db.sqlite3
 $ python3 migrate
 $ python3 manage.py shell < scripts/create_challenges.py
 ```
-
-
-## Contributing
-
-TODO
 
 ## License
 

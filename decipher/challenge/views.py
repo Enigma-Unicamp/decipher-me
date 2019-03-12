@@ -1,12 +1,15 @@
 '''
 Decipher challenge views
 '''
-
+import json
 from datetime import datetime
+from django.contrib import messages
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms.models import model_to_dict
 from django.conf import settings
 from . import forms
 from .models import User, Challenge
@@ -27,17 +30,72 @@ class HomeView(TemplateView):
 
     template_name = 'challenge/home.html'
 
+
+
+class ChallengesPageView(LoginRequiredMixin, View):
+
+    template_name = 'challenge/challenges_page.html'
+
     def get(self, request, *args, **kwargs):
 
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
-            challs = Challenge.objects.all()
-            # challs = Challenge.objects.filter(id_chall__lte=request.user.level)
+            challs = list(Challenge.objects.all().values())
+
+            # concatenate challenge info with field that
+            # says if user has unlocked or not the challenge
+            # and info that says if user has done ir ot not
+            challenges_done = json.loads(request.user.challenges_done)
+
+            # total number of users
+            n_users = len(User.objects.all())
+
+            # if there's at least one user, compute percentage
+            if n_users > 0:
+                for i in range(0, len(challs)):
+                    challs[i]['solved_by'] = challs[i]['solved_by'] / n_users
+                    challs[i]['solved_by'] *= 100
+            # if there's no user, just set it to zero
+            else:
+                for i in range(0, len(challs)):
+                    challs[i]['solved_by'] = 0
+
+            if settings.SEQUENTIAL_CHALLENGES:
+
+                # for sequential challenges, challenge 0 may be done or
+                # not, but is always unlocked for everybody
+                challs[0]['is_done'] = challenges_done[0]
+                challs[0]['locked'] = '0'
+
+                # from challenge 1 onwards, we need to verify if
+                # it's unlocked or not
+                for i in range(1, len(challs)):
+                    if challenges_done[i] == '1':
+                        is_done = '1'
+                        locked = '0'
+                    elif challenges_done[i - 1] == '1':
+                        is_done = '0'
+                        locked = '0'
+                    else:
+                        is_done = '0'
+                        locked = '1'
+                    challs[i]['is_done'] = is_done
+                    challs[i]['locked'] = locked
+
+            # for non sequential challenges, every challenge is unlocked 
+            else:
+                for i in range(0, len(challs)):
+                    is_done = challenges_done[i]
+                    locked = '0'
+                    challs[i]['is_done'] = is_done
+                    challs[i]['locked'] = locked
+
             return render(
-                       request, self.template_name,
-                       { 'challenges' : challs ,
-                         'sequential' : settings.SEQUENTIAL_CHALLENGES }
-                   )
+                request, self.template_name,
+                { 'challenges' : challs,
+                  'sequential' : settings.SEQUENTIAL_CHALLENGES }
+            )
+
         # otherwise, don't
         return render(request, self.template_name)
 
@@ -46,64 +104,91 @@ class HomeView(TemplateView):
 class ChallengeView(LoginRequiredMixin, View):
 
     template_name = 'challenge/challenge.html'
+    form_class = forms.ChallengeForm
 
     def post(self, request, *args, **kwargs):
 
-        chall = get_object_or_404(
-            Challenge,
-            id_chall=request.POST['id_chall']
-            )
+        form = self.form_class(request.POST)
 
-        # user is allowed or not to check the challenge
-        if settings.SEQUENTIAL_CHALLENGES and request.user.level < chall.id_chall:
-            return redirect('challenge:index')
+        chall = get_object_or_404(
+                  Challenge,
+                  id_chall=request.POST['id_chall']
+                )
+
+        # challenges done by user
+        challenges_done = json.loads(request.user.challenges_done)
+
+        # user isn't allowed to check this challenge
+        if settings.SEQUENTIAL_CHALLENGES:
+            if chall.id_chall != 0:
+                if challenges_done[chall.id_chall - 1] == '0':
+                    return redirect('challenge:index')
+
+        # 'link type challenge', so open the link file to
+        # pass the link to template
+        if chall.type_chall == 'link':
+            file_path = "challenge/static/" + chall.file_content
+            file_object = open(file_path, 'r')
+            link = file_object.read()
+        else:
+            link = None
+
+        # total number of users
+        n_users = len(User.objects.all())
+
+        # percentage of users that solved this challenged
+        if n_users > 0:
+            chall.solved_by = chall.solved_by / n_users
+            chall.solved_by *= 100
+        # if there's no user, just set it to zero
+        else:
+            chall.solved_by = 0
 
         # if the post request has no 'flag', render the challenge page
         if not "flag" in request.POST.keys():
-
-            # 'link type challenge', so open the link file to pass the link to template
-            if chall.type_chall == 'link':
-                file_path = "challenge/static/" + chall.file_content
-                file_object = open(file_path, 'r')
-                link = file_object.read()
-                return render(
-                          request, self.template_name, 
-                          {'link' : link, 'challenge' : chall }
-                          )
-            
-            # other types of challenges
-            return render(request, self.template_name, { 'challenge' : chall })
-
-        # if it has the 'flag', check if it's correct
-        flag = request.POST['flag']
-        hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
-
-        # pattern to verify regex
-        pattern = re.compile("decipher{+[\x21-\x7E]+}$")
-
-        # flag is correct
-        if pattern.match(flag) and hash_flag == chall.flag:
-
-            if settings.SEQUENTIAL_CHALLENGES:
-                if request.user.level == chall.id_chall:
-                    request.user.level += 1
-            else:
-                if not str(chall.id_chall) in request.user.challenges_done:
-                    request.user.challenges_done += str(chall.id_chall)
-            request.user.last_capture = datetime.now()
-            request.user.save()
-            return redirect('challenge:home')
-
-        # flag is incorret
-        else:
             return render(
                 request, self.template_name,
-                {'wrong_flag' : True, 'challenge': chall}
-                )
+                {'link' : link, 'challenge' : chall, 'form' : form }
+            )
+
+        # if it has the 'flag', check if it's a resubmission
+        if challenges_done[chall.id_chall] == '1':
+            error_message = "You have already completed this challenge."
+
+        # otherwise let's check if the flag is correct
+        else:
+            flag = request.POST['flag']
+            hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
+
+            # pattern to verify regex
+            pattern = re.compile("decipher{+[\x21-\x7E]+}$")
+
+            # flag is correct
+            if pattern.match(flag) and hash_flag == chall.flag:
+
+                challenges_done[chall.id_chall] = '1'
+                request.user.challenges_done = json.dumps(challenges_done)
+                request.user.points += chall.points
+                request.user.last_capture = datetime.now(tz=timezone.utc)
+                chall.solved_by += 1
+                request.user.save()
+                chall.save()
+
+                return redirect('challenge:challenges_page')
+
+            # otherwise warn the user that the flag is wrong
+            else:
+                error_message = "Wrong flag :("
+
+        return render(
+            request, self.template_name,
+            { 'error_message' : error_message, 'link' : link, 
+              'challenge': chall, 'form' : form }
+        )
 
 
 
-class RulesView(TemplateView):
+class RulesView(LoginRequiredMixin, TemplateView):
 
     template_name = 'challenge/rules.html'
 
@@ -132,11 +217,13 @@ class RegisterView(TemplateView):
 
         # If the form is valid create new user object
         if form.is_valid():
+            messages.success(request, 'Registration successful.')
             User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'],
-                first_name=form.cleaned_data['first_name'],
                 email=form.cleaned_data['email'],
+                points=0,
+                last_capture=datetime.now(tz=timezone.utc),
             )
             # Redirect new user to login page
             return redirect('challenge:login')
@@ -153,7 +240,7 @@ class LoginView(TemplateView):
 
     # Render login page
     def get(self, request, *args, **kwargs):
-    
+
         # If the user is already logged redirect him to index
         if request.user.is_authenticated:
             return redirect('challenge:index')
@@ -169,25 +256,93 @@ class LoginView(TemplateView):
 
         # Check if the attempt is valid
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
             user = authenticate(request, username=username, password=password)
-
-            # Authenticate user if he's valid
+            # If valid user, redirect to index page
             if user is not None:
                 login(request, user)
-                print("User {} logged".format(user))
                 return redirect('challenge:index')
+            # Otherwise spawn invalid login message
+            else:
+                form.invalidLoginMessage()
 
-        # Otherwise show the login page again
-        return redirect('challenge:login')
+        # Show the login page again (with invalid login message)
+        return render(request, self.template_name, {'form': form})
+
+
+
+class RankingView(LoginRequiredMixin, View):
+
+    template_name = 'challenge/ranking.html'
+
+    def get(self, request, *args, **kwargs):
+
+        ranking = []
+        users = User.objects.filter(is_staff=False)
+        ranking = users.order_by('-points', 'last_capture')
+
+        return render(request, self.template_name, {'ranking': ranking})
 
 
 
 class LogoutView(LoginRequiredMixin, View):
 
-    # Logout user and redirect him to index
+    template_name = 'challenge/ranking.html'
+
     def get(self, request, *args, **kwargs):
 
         logout(request)
         return redirect('challenge:index')
+
+
+
+class PasswordChangeView(LoginRequiredMixin, TemplateView):
+
+    template_name = 'challenge/password_change.html'
+    form_class = forms.PasswordChangeForm
+
+    # Render change password form
+    def get(self, request, *args, **kwargs):
+
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    # Handle password change attempt
+    def post(self, request):
+
+        form = self.form_class(request.POST)
+
+        # If the form is valid change user password
+        if form.is_valid():
+
+            # Get user object
+            username = request.user.username
+            user = User.objects.get(username__exact=username)
+
+            # Change user password
+            new_password = form.cleaned_data.get("new_password")
+            user.set_password(new_password)
+            user.save()
+
+            # Redirect user to login page with success message
+            messages.success(
+                request, "Password change successful. "
+                + "Please login again."
+            )
+            return redirect('challenge:login')
+
+        # Otherwise render change password page again
+        return render(request, self.template_name, {'form': form})
+
+
+
+class PasswordResetCompleteView(TemplateView):
+
+    # Redirect to login page with success message
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(
+            request, "Password reset successful. "
+            + "Please login again."
+        )
+        return redirect('challenge:login')

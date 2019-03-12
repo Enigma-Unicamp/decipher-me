@@ -3,12 +3,17 @@
 {% block title %} {{ challenge.title }} {% endblock %}
 {% block content %}
 
-    <h4 style="margin-bottom:30pt">
+    <h4 style="margin-bottom:15pt">
         {{ challenge.title }}
     </h4>
 
+    <div style="margin-bottom:30pt" class="chall-points-solved-by">
+      Points for solving: {{ challenge.points }} </br>
+      Solved by: {{ challenge.solved_by|floatformat:0 }}% users </p>
+    </div>
+
     {% autoescape off %}
-        <div style="margin-bottom:30pt">
+        <div style="margin-bottom:30pt" class="chall-description">
             {{ challenge.description }}
         </div>
     {% endautoescape %}
@@ -33,21 +38,21 @@
     {% endif %}
 
 
-    <form action="." method="post">
+    <form action="{% url 'challenge:challenge' %}" method="post">
         {% csrf_token %}
-        <input type="hidden" name="id_chall" value={{ challenge.id_chall }}>
+
+        <input type="hidden" name="id_chall" value="{{ challenge.id_chall }}">
         <div class="input-field">
-            <input placeholder="decipher{flag}" id="flag_input" type="text" name="flag">
-            <label for="flag_input">Flag</label><br/>
+            {{ form.flag }}
         </div>
-        <button type="submit"  class="btn">
+        <button type="submit" class="btn">
             Submit
         </button>
     </form>
 
-    {% if wrong_flag %}
+    {% if error_message %}
         <div style="margin-top:20pt">
-            <b>Wrong flag :(</b>
+            <b> {{ error_message }} </b>
         </div>
     {% endif %}
 

@@ -1,60 +1,44 @@
 {% extends 'challenge/base.html' %}
-{% block title %}Home{% endblock %}
+{% load static %}
+
+{% block title %}
+  Home
+{% endblock %}
+
 {% block content %}
 
-    {% if request.user.is_authenticated %}
+  <img class="home-image" src="{% static "assets/sphinx.svg" %}"></img>
 
-        <h4 style="margin-bottom:30pt">
-            Challenges
-        </h4>
-
-        {% if challenges %}
-
-            {% if sequential == True %}
-                {% for chall in challenges %}
-                    <form action="{% url 'challenge:challenge' %}" method="post">
-                        {% csrf_token %}
-                        {% if chall.id_chall == user.level %}
-                            <i class="material-icons" style="vertical-align: middle">lock</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn">
-                        {% elif chall.id_chall > user.level %}
-                            <i class="material-icons" style="vertical-align: middle">lock</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn" disabled>
-                        {% else %}
-                            <i class="material-icons" style="vertical-align: middle">lock_open</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn">
-                        {% endif %}
-                        <input name="id_chall" type="hidden" value={{ chall.id_chall }}>
-                    </form><br/>
-                {% endfor %}
-
-            {% else %}
-                {% for chall in challenges %}
-                    <form action="{% url 'challenge:challenge' %}" method="post">
-                        {% csrf_token %}
-                        {% if chall.id_chall|stringformat:"i" in request.user.challenges_done %}
-                            <i class="material-icons" style="vertical-align: middle">lock_open</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn">
-                        {% else %}
-                            <i class="material-icons" style="vertical-align: middle">lock</i>
-                            <input type="submit" value="{{ chall.title }}" class="btn">
-                        {% endif %}
-                        <input name="id_chall" type="hidden" value={{ chall.id_chall }}>
-                    </form><br/>
-                {% endfor %}
-            {% endif %}
-            
-        {% else %}
-            We still don't have any challenges. Come back soon.
-        {% endif %}
-
-    {% else %}
-
-        <h4 style="margin-bottom:30pt">
-            Welcome! Please login
-        </h4>
-
-    {% endif %}
-
+  <!-- Here we have the same text three times because the text size is
+       different in differents devices -->
+  <div style="text-align: center">
+    <p class="hide-on-med-and-down" style="font-size:25px">
+      <b>Decipher Me</b> is a free and open web framework to host Jeopardy-style
+      Capture The Flag contests. It was built using Django and
+      Materialize. Check our
+      <a href="https://gitlab.com/enigmaster/decipher-me">GitLab page</a> to
+      learn more. If you want to, feel free to change this homepage with your
+      own brand. Also, do not feel afraid to contact us and help to improve the
+      code!
+    </p>
+    <p class="hide-on-large-only hide-on-small-only" style="font-size:20px">
+      <b>Decipher Me</b> is a free and open web framework to host Jeopardy-style
+      Capture The Flag contests. It was built using Django and
+      Materialize. Check our
+      <a href="https://gitlab.com/enigmaster/decipher-me">GitLab page</a> to
+      learn more. If you want to, feel free to change this homepage with your
+      own brand. Also, do not feel afraid to contact us and help to improve the
+      code!
+    </p>
+    <p class="hide-on-med-and-up" style="font-size:15px">
+      <b>Decipher Me</b> is a free and open web framework to host Jeopardy-style
+      Capture The Flag contests. It was built using Django and
+      Materialize. Check our
+      <a href="https://gitlab.com/enigmaster/decipher-me">GitLab page</a> to
+      learn more. If you want to, feel free to change this homepage with your
+      own brand. Also, do not feel afraid to contact us and help to improve the
+      code!
+    </p>
+  </div>
 
 {% endblock %}

@@ -89,16 +89,10 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'OPTIONS': {
+            'min_length': 6,
+        }
     },
 ]
 
@@ -128,6 +122,10 @@ AUTH_USER_MODEL = 'challenge.User'
 
 # Sequential challenges or not?
 SEQUENTIAL_CHALLENGES = False
+
+
+# Number of challenges
+NUMBER_OF_CHALLENGES = 3
 
 
 # Email settings (needed by reset password module)

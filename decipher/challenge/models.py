@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
@@ -8,14 +9,15 @@ from django.conf import settings
 # Django user model, but then it wouldn't be possible to add attributes to it
 class User(AbstractUser):
 
-    if settings.SEQUENTIAL_CHALLENGES:
-        # needed to unlock challenges for each user
-        level = models.PositiveIntegerField(default=0)
-    else:
-        # needed to know which challenges has been done
-        challenges_done = models.TextField()
+    # which challenges have been done
+    initial_val = ['0' for i in range(settings.NUMBER_OF_CHALLENGES)]
+    initial_val = json.dumps(initial_val)
+    challenges_done = models.TextField(default=initial_val)
 
-    # needed by the ranking module
+    # points that user got
+    points = models.PositiveIntegerField(default=0)
+
+    # ranking tiebreaker
     last_capture = models.DateTimeField(default=None, null=True, blank=True) 
 
 
@@ -27,5 +29,7 @@ class Challenge(models.Model):
     type_chall   = models.CharField(max_length=20)
     file_content = models.TextField()
     description  = models.TextField()
+    points       = models.PositiveIntegerField(default=0)
     flag         = models.CharField(max_length=200)
+    solved_by    = models.PositiveIntegerField(default=0)
 
