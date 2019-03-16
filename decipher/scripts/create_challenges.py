@@ -1,9 +1,10 @@
-import os
-import csv
-import uuid
-import shutil
-from challenge.models import Challenge
 from hashlib import sha256
+import shutil
+import uuid
+import csv
+import os
+
+from challenge.models import Challenge
 
 
 # all challenges directories

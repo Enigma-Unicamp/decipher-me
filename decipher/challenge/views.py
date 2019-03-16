@@ -1,21 +1,21 @@
 '''
 Decipher challenge views
 '''
-import json
 from datetime import datetime
-from django.contrib import messages
-from django.utils import timezone
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
-from django.views.generic import TemplateView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.conf import settings
-from . import forms
-from .models import User, Challenge
-
 from hashlib import sha256
+import json
 import re
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView, View
+from django.contrib import messages
+from django.utils import timezone
+from django.conf import settings
+
+from .models import User, Challenge
+from . import forms
 
 class IndexView(TemplateView):
 

@@ -2,10 +2,10 @@
 Decipher challenge forms
 '''
 
-from django import forms
-from .models import User, Challenge
 from django.contrib.auth.password_validation import validate_password
+from django import forms
 
+from .models import User, Challenge
 
 
 class ChallengeForm(forms.ModelForm):
