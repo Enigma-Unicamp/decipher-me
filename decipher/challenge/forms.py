@@ -5,7 +5,6 @@ Decipher challenge forms
 from django import forms
 from .models import User, Challenge
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.forms import SetPasswordForm
 
 
 
