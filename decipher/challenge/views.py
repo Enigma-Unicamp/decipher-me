@@ -176,8 +176,7 @@ class ChallengeView(LoginRequiredMixin, View):
                 return redirect('challenge:challenges_page')
 
             # otherwise warn the user that the flag is wrong
-            else:
-                error_message = "Wrong flag :("
+            error_message = "Wrong flag :("
 
         return render(
             request, self.template_name,
@@ -263,8 +262,7 @@ class LoginView(TemplateView):
                 login(request, user)
                 return redirect('challenge:index')
             # Otherwise spawn invalid login message
-            else:
-                form.invalidLoginMessage()
+            form.invalidLoginMessage()
 
         # Show the login page again (with invalid login message)
         return render(request, self.template_name, {'form': form})
