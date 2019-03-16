@@ -35,7 +35,7 @@ class ChallengesPageView(LoginRequiredMixin, View):
 
     template_name = 'challenge/challenges_page.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
@@ -105,7 +105,7 @@ class ChallengeView(LoginRequiredMixin, View):
     template_name = 'challenge/challenge.html'
     form_class = forms.ChallengeForm
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
 
         form = self.form_class(request.POST)
 
@@ -199,7 +199,7 @@ class RegisterView(TemplateView):
     form_class = forms.RegisterForm
 
     # Render register page
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         # Redirect to index if user is already logged in
         if request.user.is_authenticated:
@@ -238,7 +238,7 @@ class LoginView(TemplateView):
     form_class = forms.LoginForm
 
     # Render login page
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         # If the user is already logged redirect him to index
         if request.user.is_authenticated:
@@ -275,7 +275,7 @@ class RankingView(LoginRequiredMixin, View):
 
     template_name = 'challenge/ranking.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         ranking = []
         users = User.objects.filter(is_staff=False)
@@ -289,7 +289,7 @@ class LogoutView(LoginRequiredMixin, View):
 
     template_name = 'challenge/ranking.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         logout(request)
         return redirect('challenge:index')
