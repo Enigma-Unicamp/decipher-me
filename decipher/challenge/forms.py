@@ -109,6 +109,13 @@ class RegisterForm(forms.ModelForm):
                 forms.ValidationError("This email address is already in use.")
             )
 
+        # check if username has not yet been taken
+        if User.objects.filter(username=username):
+            self.add_error(
+                'username',
+                forms.ValidationError("This username is already in use.")
+            )
+
         return cleaned_data
 
 
