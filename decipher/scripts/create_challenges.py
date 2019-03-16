@@ -79,7 +79,7 @@ old_settings_path = "decipher/settings.py"
 new_settings_path = "decipher/new_settings.py"
 
 with open(old_settings_path, 'r') as old_settings_file:
-    with open(new_settings_path, 'w') as new_settings_file:    
+    with open(new_settings_path, 'w') as new_settings_file:
 
         for line in old_settings_file:
             if 'NUMBER_OF_CHALLENGES' in line:
@@ -87,10 +87,8 @@ with open(old_settings_path, 'r') as old_settings_file:
                            + str(number_of_challenges) + '\n'
                 new_settings_file.write(new_line)
             else:
-                new_settings_file.write(line)                    
+                new_settings_file.write(line)
 
 # replace old file by new one and then delete it
 shutil.copy(new_settings_path, old_settings_path)
 os.remove(new_settings_path)
-
-

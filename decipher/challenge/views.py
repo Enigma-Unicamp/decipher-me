@@ -81,7 +81,7 @@ class ChallengesPageView(LoginRequiredMixin, View):
                     challs[i]['is_done'] = is_done
                     challs[i]['locked'] = locked
 
-            # for non sequential challenges, every challenge is unlocked 
+            # for non sequential challenges, every challenge is unlocked
             else:
                 for i in range(0, len(challs)):
                     is_done = challenges_done[i]
@@ -180,7 +180,7 @@ class ChallengeView(LoginRequiredMixin, View):
 
         return render(
             request, self.template_name,
-            { 'error_message' : error_message, 'link' : link, 
+            { 'error_message' : error_message, 'link' : link,
               'challenge': chall, 'form' : form }
         )
 

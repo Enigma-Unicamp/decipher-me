@@ -18,7 +18,7 @@ class User(AbstractUser):
     points = models.PositiveIntegerField(default=0)
 
     # ranking tiebreaker
-    last_capture = models.DateTimeField(default=None, null=True, blank=True) 
+    last_capture = models.DateTimeField(default=None, null=True, blank=True)
 
 
 
@@ -32,4 +32,3 @@ class Challenge(models.Model):
     points       = models.PositiveIntegerField(default=0)
     flag         = models.CharField(max_length=200)
     solved_by    = models.PositiveIntegerField(default=0)
-
