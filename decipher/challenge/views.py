@@ -9,7 +9,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms.models import model_to_dict
 from django.conf import settings
 from . import forms
 from .models import User, Challenge
