@@ -53,12 +53,8 @@ class ChallengesPageView(LoginRequiredMixin, View):
             # if there's at least one user, compute percentage
             if n_users > 0:
                 for i in range(0, len(challs)):
-                    # print(challs[i]['solved_by'])
                     challs[i]['solved_by'] = challs[i]['solved_by'] / n_users
-                    # print(challs[i]['solved_by'])
                     challs[i]['solved_by'] *= 100
-                    # print(challs[i]['solved_by'])
-                    # print()
             # if there's no user, just set it to zero
             else:
                 for i in range(0, len(challs)):
@@ -161,9 +157,7 @@ class ChallengeView(LoginRequiredMixin, View):
                     request.user.challenges_done = json.dumps(challenges_done)
                     request.user.points += chall.points
                     request.user.last_capture = datetime.now(tz=timezone.utc)
-                    print(chall.solved_by)
                     chall.solved_by += 1
-                    print(chall.solved_by)
                     request.user.save()
                     chall.save()
 
