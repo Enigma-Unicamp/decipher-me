@@ -69,13 +69,6 @@ $ python3 scripts/generate_secret_key.py secretkey.txt
 **Warning!** Don't replace your `SECRET_KEY` once the app is deployed, it can
 cause usability issues.
 
-Create the database and you are ready to run:
-
-```shell
-$ ./manage.py migrate
-$ ./manage.py runserver 0:8000
-```
-
 ## Using
 
 ### Sequential or non sequential challenges
@@ -147,10 +140,12 @@ files doesn't matter to us, it can be whatever you want.
 After adding all the challenges, navigate to the folder
 `decipher-me/decipher` and run the following commands:
 
-```
-$ rm db.sqlite3
-$ python3 migrate
-$ python3 manage.py shell < scripts/create_challenges.py
+
+```shell
+$ ./manage.py makemigrations
+$ ./manage.py migrate
+$ ./manage.py shell < scripts/create_challenges.py
+$ ./manage.py runserver 0:8000
 ```
 
 ## License
