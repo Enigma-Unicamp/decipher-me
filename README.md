@@ -148,6 +148,11 @@ $ ./manage.py shell < scripts/create_challenges.py
 $ ./manage.py runserver 0:8000
 ```
 
+## How to contribute
+
+Please check [this page](https://gitlab.com/enigmaster/decipher-me/blob/master/CONTRIBUTING.md).
+
+
 ## License
 
 This project is licensed under the
