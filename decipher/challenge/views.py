@@ -53,8 +53,12 @@ class ChallengesPageView(LoginRequiredMixin, View):
             # if there's at least one user, compute percentage
             if n_users > 0:
                 for i in range(0, len(challs)):
+                    # print(challs[i]['solved_by'])
                     challs[i]['solved_by'] = challs[i]['solved_by'] / n_users
+                    # print(challs[i]['solved_by'])
                     challs[i]['solved_by'] *= 100
+                    # print(challs[i]['solved_by'])
+                    # print()
             # if there's no user, just set it to zero
             else:
                 for i in range(0, len(challs)):
@@ -133,10 +137,57 @@ class ChallengeView(LoginRequiredMixin, View):
         else:
             link = None
 
+        # we're gonna use this to show specific errors to users
+        flag_resubmission = False
+        wrong_flag = False
+
+        # check if it's a flag submission 
+        if "flag" in request.POST.keys():
+
+            # guarantee that's not a resubmission
+            if challenges_done[chall.id_chall] == '0':
+
+                # now let's check if the flag is correct
+                flag = request.POST['flag']
+                hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
+
+                # pattern to verify regex
+                pattern = re.compile("decipher{+[\x21-\x7E]+}$")
+
+                # flag is correct
+                if pattern.match(flag) and hash_flag == chall.flag:
+
+                    challenges_done[chall.id_chall] = '1'
+                    request.user.challenges_done = json.dumps(challenges_done)
+                    request.user.points += chall.points
+                    request.user.last_capture = datetime.now(tz=timezone.utc)
+                    print(chall.solved_by)
+                    chall.solved_by += 1
+                    print(chall.solved_by)
+                    request.user.save()
+                    chall.save()
+
+                    return redirect('challenge:challenges_page')
+
+                # otherwise the flag is incorrect
+                else:
+                    wrong_flag = True
+
+            # it's a resubmission
+            else:
+                flag_resubmission = True
+
+        # select the 'correct error' to show
+        error_message = None
+        if flag_resubmission:
+            error_message = "You have already completed this challenge."
+        elif wrong_flag:
+            error_message = "Wrong flag :("
+
         # total number of users
         n_users = len(User.objects.all())
 
-        # percentage of users that solved this challenged
+        # percentage of users that solved this challenge
         if n_users > 0:
             chall.solved_by = chall.solved_by / n_users
             chall.solved_by *= 100
@@ -144,42 +195,7 @@ class ChallengeView(LoginRequiredMixin, View):
         else:
             chall.solved_by = 0
 
-        # if the post request has no 'flag', render the challenge page
-        if not "flag" in request.POST.keys():
-            return render(
-                request, self.template_name,
-                {'link' : link, 'challenge' : chall, 'form' : form }
-            )
-
-        # if it has the 'flag', check if it's a resubmission
-        if challenges_done[chall.id_chall] == '1':
-            error_message = "You have already completed this challenge."
-
-        # otherwise let's check if the flag is correct
-        else:
-            flag = request.POST['flag']
-            hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
-
-            # pattern to verify regex
-            pattern = re.compile("decipher{+[\x21-\x7E]+}$")
-
-            # flag is correct
-            if pattern.match(flag) and hash_flag == chall.flag:
-
-                challenges_done[chall.id_chall] = '1'
-                request.user.challenges_done = json.dumps(challenges_done)
-                request.user.points += chall.points
-                request.user.last_capture = datetime.now(tz=timezone.utc)
-                chall.solved_by += 1
-                request.user.save()
-                chall.save()
-
-                return redirect('challenge:challenges_page')
-
-            # otherwise warn the user that the flag is wrong
-            else:
-                error_message = "Wrong flag :("
-
+        # render the challenge page
         return render(
             request, self.template_name,
             { 'error_message' : error_message, 'link' : link, 
