@@ -19,4 +19,3 @@ generatedKey = ''.join([random.SystemRandom().choice(string.ascii_letters +
 secretFile = open(filePath, 'w')
 secretFile.write(generatedKey)
 secretFile.close()
-

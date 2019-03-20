@@ -2,11 +2,10 @@
 Decipher challenge forms
 '''
 
-from django import forms
-from .models import User, Challenge
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.forms import SetPasswordForm
+from django import forms
 
+from .models import User, Challenge
 
 
 class ChallengeForm(forms.ModelForm):
@@ -44,8 +43,6 @@ class LoginForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        username = cleaned_data.get("username")
-        password = cleaned_data.get("password")
         return cleaned_data
 
     def invalidLoginMessage(self):
@@ -110,6 +107,13 @@ class RegisterForm(forms.ModelForm):
             self.add_error(
                 'email',
                 forms.ValidationError("This email address is already in use.")
+            )
+
+        # check if username has not yet been taken
+        if User.objects.filter(username=username):
+            self.add_error(
+                'username',
+                forms.ValidationError("This username is already in use.")
             )
 
         return cleaned_data
