@@ -198,7 +198,7 @@ class RegisterView(TemplateView):
     form_class = forms.RegisterForm
 
     # Render register page
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
 
         # Redirect to index if user is already logged in
         if request.user.is_authenticated:
@@ -238,7 +238,7 @@ class LoginView(TemplateView):
     form_class = forms.LoginForm
 
     # Render login page
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
 
         # If the user is already logged redirect him to index
         if request.user.is_authenticated:
