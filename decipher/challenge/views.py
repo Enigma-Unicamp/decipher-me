@@ -202,7 +202,8 @@ class RegisterView(TemplateView):
 
         # Redirect to index if user is already logged in
         if request.user.is_authenticated:
-            return redirect()
+            return redirect('challenge:index')
+
 
         # Otherwise show form to register
         form = self.form_class()
