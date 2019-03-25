@@ -7,7 +7,7 @@ stages:
 build_job:
         stage: build
         before_script:
-                - pip3 install --no-cache-dir django
+                - pip3 install --no-cache-dir -r requirements.txt
         script:
                 - cd decipher/
                 - python3 scripts/generate_secret_key.py secretkey.txt
@@ -19,13 +19,15 @@ build_job:
 code_style_challenge:
         stage: code_style
         before_script:
-                - pip3 install --no-cache-dir django pylint pylint-django
+                - pip3 install --no-cache-dir -r requirements.txt
+                - pip3 install --no-cache-dir -r requirements-dev.txt
         script:
                 - pylint --load-plugins pylint_django --rcfile=.pylint.cfg decipher/challenge/
 
 code_style_scripts:
         stage: code_style
         before_script:
-                - pip3 install --no-cache-dir django pylint pylint-django
+                - pip3 install --no-cache-dir -r requirements.txt
+                - pip3 install --no-cache-dir -r requirements-dev.txt
         script:
                 - pylint --load-plugins pylint_django --rcfile=.pylint.cfg decipher/scripts/
