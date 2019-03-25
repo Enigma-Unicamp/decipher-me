@@ -2,11 +2,10 @@
 Decipher challenge forms
 '''
 
-from django import forms
-from .models import User, Challenge
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.forms import SetPasswordForm
+from django import forms
 
+from .models import User, Challenge
 
 
 class ChallengeForm(forms.ModelForm):
@@ -23,7 +22,7 @@ class ChallengeForm(forms.ModelForm):
             'flag': 'flag',
         }
         widgets = {
-            'flag': forms.TextInput(attrs={ 'placeholder': 'decipher{flag}' })
+            'flag': forms.TextInput(attrs={'placeholder': 'decipher{flag}'})
         }
 
 
@@ -44,8 +43,6 @@ class LoginForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        username = cleaned_data.get("username")
-        password = cleaned_data.get("password")
         return cleaned_data
 
     def invalidLoginMessage(self):
@@ -58,7 +55,7 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.ModelForm):
 
-    password_confirmation=forms.CharField(
+    password_confirmation = forms.CharField(
         label='password confirmation',
         help_text='confirm your password',
         max_length=User._meta.get_field('password').max_length,
@@ -112,6 +109,13 @@ class RegisterForm(forms.ModelForm):
                 forms.ValidationError("This email address is already in use.")
             )
 
+        # check if username has not yet been taken
+        if User.objects.filter(username=username):
+            self.add_error(
+                'username',
+                forms.ValidationError("This username is already in use.")
+            )
+
         return cleaned_data
 
 
@@ -135,8 +139,8 @@ class PasswordChangeForm(forms.Form):
         cleaned_data = super().clean()
         new_password = cleaned_data.get("new_password")
         new_password_confirmation = cleaned_data.get(
-                                        "new_password_confirmation"
-                                    )
+            "new_password_confirmation"
+        )
 
         # check if password and password confirmation match
         if new_password != new_password_confirmation:

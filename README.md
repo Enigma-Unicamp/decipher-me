@@ -7,6 +7,10 @@
 Decipher Me is a free and open web framework to host Jeopardy-style Capture The
 Flag contests.
 
+[![pipeline status](https://gitlab.com/enigmaster/decipher-me/badges/master/pipeline.svg)](https://gitlab.com/enigmaster/decipher-me/commits/master)
+
+---
+
 ## What is a _Capture The Flag_?
 
 CTF is a information security and hacking competition. Among the common types,
