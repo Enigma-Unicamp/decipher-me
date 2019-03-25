@@ -39,7 +39,7 @@ with open(settings_path, 'r') as settings_file:
         challenge_points = settings[4]
 
         # check if there's any file associated to the challenge
-        if not challenge_type == 'no_files':      
+        if not challenge_type == 'no_files':
 
             # generate unique key to ubfuscate challenge folder
             new_key = uuid.uuid4().hex[:25]
