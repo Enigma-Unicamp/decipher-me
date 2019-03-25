@@ -18,11 +18,11 @@ code_style_challenge:
         before_script:
                 - pip3 install --no-cache-dir django pylint
         script:
-                - pylint --rcfile=.pylint.cfg decipher/challenge/
+                - pylint --load-plugins pylint_django --rcfile=.pylint.cfg decipher/challenge/
 
 code_style_scripts:
         stage: code_style
         before_script:
                 - pip3 install --no-cache-dir django pylint
         script:
-                - pylint --rcfile=.pylint.cfg decipher/scripts/
+                - pylint --load-plugins pylint_django --rcfile=.pylint.cfg decipher/scripts/
