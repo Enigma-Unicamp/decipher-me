@@ -91,8 +91,8 @@ class ChallengesPageView(LoginRequiredMixin, View):
 
             return render(
                 request, self.template_name,
-                { 'challenges' : challs,
-                  'sequential' : settings.SEQUENTIAL_CHALLENGES }
+                {'challenges' : challs,
+                 'sequential' : settings.SEQUENTIAL_CHALLENGES}
             )
 
         # otherwise, don't
@@ -110,9 +110,9 @@ class ChallengeView(LoginRequiredMixin, View):
         form = self.form_class(request.POST)
 
         chall = get_object_or_404(
-                  Challenge,
-                  id_chall=request.POST['id_chall']
-                )
+            Challenge,
+            id_chall=request.POST['id_chall']
+        )
 
         # challenges done by user
         challenges_done = json.loads(request.user.challenges_done)
@@ -147,7 +147,7 @@ class ChallengeView(LoginRequiredMixin, View):
         if not "flag" in request.POST.keys():
             return render(
                 request, self.template_name,
-                {'link' : link, 'challenge' : chall, 'form' : form }
+                {'link' : link, 'challenge' : chall, 'form' : form}
             )
 
         # if it has the 'flag', check if it's a resubmission
@@ -180,8 +180,8 @@ class ChallengeView(LoginRequiredMixin, View):
 
         return render(
             request, self.template_name,
-            { 'error_message' : error_message, 'link' : link,
-              'challenge': chall, 'form' : form }
+            {'error_message' : error_message, 'link' : link,
+             'challenge': chall, 'form' : form}
         )
 
 
