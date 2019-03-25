@@ -24,11 +24,11 @@ class User(AbstractUser):
 
 # Challenges model
 class Challenge(models.Model):
-    id_chall     = models.PositiveIntegerField(primary_key=True, unique=True)
-    title        = models.CharField(max_length=200, unique=True)
-    type_chall   = models.CharField(max_length=20)
+    id_chall = models.PositiveIntegerField(primary_key=True, unique=True)
+    title = models.CharField(max_length=200, unique=True)
+    type_chall = models.CharField(max_length=20)
     file_content = models.TextField()
-    description  = models.TextField()
-    points       = models.PositiveIntegerField(default=0)
-    flag         = models.CharField(max_length=200)
-    solved_by    = models.PositiveIntegerField(default=0)
+    description = models.TextField()
+    points = models.PositiveIntegerField(default=0)
+    flag = models.CharField(max_length=200)
+    solved_by = models.PositiveIntegerField(default=0)
