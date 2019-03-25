@@ -23,7 +23,7 @@ Forensic. More info [here](https://ctftime.org/ctf-wtf/).
 
 ### Requirements
 
-- Python 3.x
+- Python 3.x, Pip and Virtualenv
 
 ### Setup
 
@@ -56,7 +56,13 @@ Then, install [Django](https://www.djangoproject.com/), a Python framework to
 create and manage a webserver.
 
 ```shell
-$ pip3 install django
+$ pip3 install -U -r requirements.txt
+```
+
+If you want to contribute with the project, also install those dependencies:
+
+```shell
+$ pip3 install -U -r requirements-dev.txt
 ```
 
 Now, we need to create a fresh `SECRET_KEY` for your instance, which will be
