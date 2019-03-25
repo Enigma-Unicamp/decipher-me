@@ -124,8 +124,8 @@ AUTH_USER_MODEL = 'challenge.User'
 SEQUENTIAL_CHALLENGES = False
 
 
-# Number of challenges
-NUMBER_OF_CHALLENGES = 3
+# Number of challenges (don't touch this)
+NUMBER_OF_CHALLENGES = 4
 
 
 # Email settings (needed by reset password module)
