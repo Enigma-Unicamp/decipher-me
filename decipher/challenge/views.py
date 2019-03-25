@@ -136,7 +136,7 @@ class ChallengeView(LoginRequiredMixin, View):
         flag_resubmission = False
         wrong_flag = False
 
-        # check if it's a flag submission 
+        # check if it's a flag submission
         if "flag" in request.POST.keys():
 
             # guarantee that's not a resubmission
@@ -163,8 +163,7 @@ class ChallengeView(LoginRequiredMixin, View):
                     return redirect('challenge:challenges_page')
 
                 # otherwise the flag is incorrect
-                else:
-                    wrong_flag = True
+                wrong_flag = True
 
             # it's a resubmission
             else:
