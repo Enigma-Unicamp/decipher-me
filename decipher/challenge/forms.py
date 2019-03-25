@@ -22,7 +22,7 @@ class ChallengeForm(forms.ModelForm):
             'flag': 'flag',
         }
         widgets = {
-            'flag': forms.TextInput(attrs={ 'placeholder': 'decipher{flag}' })
+            'flag': forms.TextInput(attrs={'placeholder': 'decipher{flag}'})
         }
 
 
@@ -55,7 +55,7 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.ModelForm):
 
-    password_confirmation=forms.CharField(
+    password_confirmation = forms.CharField(
         label='password confirmation',
         help_text='confirm your password',
         max_length=User._meta.get_field('password').max_length,
@@ -139,8 +139,8 @@ class PasswordChangeForm(forms.Form):
         cleaned_data = super().clean()
         new_password = cleaned_data.get("new_password")
         new_password_confirmation = cleaned_data.get(
-                                        "new_password_confirmation"
-                                    )
+            "new_password_confirmation"
+        )
 
         # check if password and password confirmation match
         if new_password != new_password_confirmation:
