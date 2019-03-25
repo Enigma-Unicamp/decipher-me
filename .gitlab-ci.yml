@@ -11,6 +11,9 @@ build_job:
         script:
                 - cd decipher/
                 - python3 scripts/generate_secret_key.py secretkey.txt
+                - ./manage.py makemigrations
+                - ./manage.py migrate
+                - ./manage.py shell < scripts/create_challenges.py
                 - ./manage.py check
 
 code_style_challenge:
