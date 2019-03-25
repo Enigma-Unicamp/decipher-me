@@ -1,0 +1,28 @@
+image: python:latest 
+
+stages:
+        - build
+        - code_style
+
+build_job:
+        stage: build
+        before_script:
+                - pip3 install --no-cache-dir django
+        script:
+                - cd decipher/
+                - python3 scripts/generate_secret_key.py secretkey.txt
+                - ./manage.py check
+
+code_style_challenge:
+        stage: code_style
+        before_script:
+                - pip3 install --no-cache-dir django pylint pylint-django
+        script:
+                - pylint --load-plugins pylint_django --rcfile=.pylint.cfg decipher/challenge/
+
+code_style_scripts:
+        stage: code_style
+        before_script:
+                - pip3 install --no-cache-dir django pylint pylint-django
+        script:
+                - pylint --load-plugins pylint_django --rcfile=.pylint.cfg decipher/scripts/

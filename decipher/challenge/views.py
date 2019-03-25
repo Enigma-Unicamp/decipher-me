@@ -1,22 +1,21 @@
 '''
 Decipher challenge views
 '''
-import json
 from datetime import datetime
-from django.contrib import messages
-from django.utils import timezone
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
-from django.views.generic import TemplateView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms.models import model_to_dict
-from django.conf import settings
-from . import forms
-from .models import User, Challenge
-
 from hashlib import sha256
+import json
 import re
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView, View
+from django.contrib import messages
+from django.utils import timezone
+from django.conf import settings
+
+from .models import User, Challenge
+from . import forms
 
 class IndexView(TemplateView):
 
@@ -36,7 +35,7 @@ class ChallengesPageView(LoginRequiredMixin, View):
 
     template_name = 'challenge/challenges_page.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
@@ -82,7 +81,7 @@ class ChallengesPageView(LoginRequiredMixin, View):
                     challs[i]['is_done'] = is_done
                     challs[i]['locked'] = locked
 
-            # for non sequential challenges, every challenge is unlocked 
+            # for non sequential challenges, every challenge is unlocked
             else:
                 for i in range(0, len(challs)):
                     is_done = challenges_done[i]
@@ -92,8 +91,8 @@ class ChallengesPageView(LoginRequiredMixin, View):
 
             return render(
                 request, self.template_name,
-                { 'challenges' : challs,
-                  'sequential' : settings.SEQUENTIAL_CHALLENGES }
+                {'challenges' : challs,
+                 'sequential' : settings.SEQUENTIAL_CHALLENGES}
             )
 
         # otherwise, don't
@@ -106,14 +105,14 @@ class ChallengeView(LoginRequiredMixin, View):
     template_name = 'challenge/challenge.html'
     form_class = forms.ChallengeForm
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
 
         form = self.form_class(request.POST)
 
         chall = get_object_or_404(
-                  Challenge,
-                  id_chall=request.POST['id_chall']
-                )
+            Challenge,
+            id_chall=request.POST['id_chall']
+        )
 
         # challenges done by user
         challenges_done = json.loads(request.user.challenges_done)
@@ -192,8 +191,8 @@ class ChallengeView(LoginRequiredMixin, View):
         # render the challenge page
         return render(
             request, self.template_name,
-            { 'error_message' : error_message, 'link' : link, 
-              'challenge': chall, 'form' : form }
+            {'error_message' : error_message, 'link' : link,
+             'challenge': chall, 'form' : form}
         )
 
 
@@ -214,7 +213,8 @@ class RegisterView(TemplateView):
 
         # Redirect to index if user is already logged in
         if request.user.is_authenticated:
-            return redirect()
+            return redirect('challenge:index')
+
 
         # Otherwise show form to register
         form = self.form_class()
@@ -274,8 +274,7 @@ class LoginView(TemplateView):
                 login(request, user)
                 return redirect('challenge:index')
             # Otherwise spawn invalid login message
-            else:
-                form.invalidLoginMessage()
+            form.invalidLoginMessage()
 
         # Show the login page again (with invalid login message)
         return render(request, self.template_name, {'form': form})
@@ -286,7 +285,7 @@ class RankingView(LoginRequiredMixin, View):
 
     template_name = 'challenge/ranking.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         ranking = []
         users = User.objects.filter(is_staff=False)
@@ -300,7 +299,7 @@ class LogoutView(LoginRequiredMixin, View):
 
     template_name = 'challenge/ranking.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
 
         logout(request)
         return redirect('challenge:index')

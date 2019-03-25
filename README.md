@@ -7,6 +7,10 @@
 Decipher Me is a free and open web framework to host Jeopardy-style Capture The
 Flag contests.
 
+[![pipeline status](https://gitlab.com/enigmaster/decipher-me/badges/master/pipeline.svg)](https://gitlab.com/enigmaster/decipher-me/commits/master)
+
+---
+
 ## What is a _Capture The Flag_?
 
 CTF is a information security and hacking competition. Among the common types,
@@ -68,13 +72,6 @@ $ python3 scripts/generate_secret_key.py secretkey.txt
 
 **Warning!** Don't replace your `SECRET_KEY` once the app is deployed, it can
 cause usability issues.
-
-Create the database and you are ready to run:
-
-```shell
-$ ./manage.py migrate
-$ ./manage.py runserver 0:8000
-```
 
 ## Using
 
@@ -147,11 +144,18 @@ files doesn't matter to us, it can be whatever you want.
 After adding all the challenges, navigate to the folder
 `decipher-me/decipher` and run the following commands:
 
+
+```shell
+$ ./manage.py makemigrations
+$ ./manage.py migrate
+$ ./manage.py shell < scripts/create_challenges.py
+$ ./manage.py runserver 0:8000
 ```
-$ rm db.sqlite3
-$ python3 migrate
-$ python3 manage.py shell < scripts/create_challenges.py
-```
+
+## How to contribute
+
+Please check [this page](https://gitlab.com/enigmaster/decipher-me/blob/master/CONTRIBUTING.md).
+
 
 ## License
 
