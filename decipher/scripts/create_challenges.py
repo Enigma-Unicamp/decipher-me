@@ -38,25 +38,32 @@ with open(settings_path, 'r') as settings_file:
         challenge_description = settings[3]
         challenge_points = settings[4]
 
-        # generate unique key to ubfuscate challenge folder
-        new_key = uuid.uuid4().hex[:25]
-        while new_key in unique_key:
+        # check if there's any file associated to the challenge
+        if not challenge_type == 'no_files':      
+
+            # generate unique key to ubfuscate challenge folder
             new_key = uuid.uuid4().hex[:25]
-        unique_key.append(new_key)
+            while new_key in unique_key:
+                new_key = uuid.uuid4().hex[:25]
+            unique_key.append(new_key)
 
-        # rename challenge folder (to ubfuscate)
-        new_title = unique_key[id_challenge]
-        os.makedirs(base_path + new_title, exist_ok=True)
-        os.rename(base_path + challenge_title, base_path + new_title)
+            # rename challenge folder (to ubfuscate)
+            new_title = unique_key[id_challenge]
+            os.makedirs(base_path + new_title, exist_ok=True)
+            os.rename(base_path + challenge_title, base_path + new_title)
 
-        # get the content path (image, download, link or page)
-        content_files = os.listdir(base_path + new_title)
-        if challenge_type != 'page':
-            content_path = "challenges_files/" + new_title + "/" + content_files[0]
+            # get the content path (image, download, link or page)
+            content_files = os.listdir(base_path + new_title)
+            if challenge_type != 'page':
+                content_path = "challenges_files/" + new_title + "/" + content_files[0]
+            else:
+                for f in content_files:
+                    if f[-4:] == 'html':
+                        content_path = "challenges_files/" + new_title + "/" + f
+
+        # if there's no associated file, set content path as none
         else:
-            for f in content_files:
-                if f[-4:] == 'html':
-                    content_path = "challenges_files/" + new_title + "/" + f
+            content_path = ''
 
         # create the challenge object
         Challenge.objects.create(
