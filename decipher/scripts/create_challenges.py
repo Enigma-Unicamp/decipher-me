@@ -32,11 +32,11 @@ with open(settings_path, 'r') as settings_file:
     for settings in reader:
 
         # ... get challenge settings
-        challenge_title       = settings[0]
-        challenge_type        = settings[1]
-        challenge_flag        = settings[2]
+        challenge_title = settings[0]
+        challenge_type = settings[1]
+        challenge_flag = settings[2]
         challenge_description = settings[3]
-        challenge_points      = settings[4]
+        challenge_points = settings[4]
 
         # generate unique key to ubfuscate challenge folder
         new_key = uuid.uuid4().hex[:25]
