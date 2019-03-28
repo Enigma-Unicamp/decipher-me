@@ -124,7 +124,9 @@ AUTH_USER_MODEL = 'challenge.User'
 SEQUENTIAL_CHALLENGES = False
 
 
-# Number of challenges (don't touch this)
+# Number of challenges
+# don't touch this, it'll be automatically computed so
+# you won't have to change this after adding new challenges
 NUMBER_OF_CHALLENGES = 4
 
 
