@@ -58,7 +58,7 @@ with open(settings_path, 'r') as settings_file:
                 content_path = "challenges_files/" + new_title + "/" + content_files[0]
             else:
                 for f in content_files:
-                    if f[-4:] == 'html' or f[-4:] == 'htm':
+                    if f[-4:] == 'html' or f[-3:] == 'htm':
                         content_path = "challenges_files/" + new_title + "/" + f
 
         # if there's no associated file, set content path as none
