@@ -125,7 +125,9 @@ SEQUENTIAL_CHALLENGES = False
 
 
 # Number of challenges
-NUMBER_OF_CHALLENGES = 3
+# don't touch this, it'll be automatically computed so
+# you won't have to change this after adding new challenges
+NUMBER_OF_CHALLENGES = 0
 
 
 # Email settings (needed by reset password module)

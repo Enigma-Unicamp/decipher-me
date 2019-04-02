@@ -120,7 +120,7 @@ challenge_title,content_type,challenge_flag,challenge_description,challenge_poin
 ```
 
 * `challenge_title`: title of the challenge
-* `content_type`: must be "download", "image", "link" or "page"
+* `content_type`: must be "no_files", download", "image", "link" or "page"
 * `challenge_flag`: is the flag and must be in the following shape: `decipher{something}`
 * `challenge_description`: challenge body text
 * `challenge_points`: how many points a user receives for solving this challenge
@@ -129,13 +129,14 @@ challenge_title,content_type,challenge_flag,challenge_description,challenge_poin
 **Atention!** The order of the challenges in this file is the one that will be
 used.
 
-To examplify, we have three challenges (`Baby Steps`, `Test Challenge` and
-`Another Test`), so our file stays like this:
+To examplify, we have four challenges (`Baby Steps`, `Test Challenge`,
+`Another Test` and `Try Me`), so our file stays like this:
 
 ```
-"Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps","1"
-"Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify","1"
-"Another Test","page","decipher{n3wfl4g}","Another challenge, just to examplify","1"
+"Baby Steps","image","decipher{f1rstfl4g}","First challenge, named Baby Steps and the flag is decipher{f1rstfl4g}","1"
+"Test Challenge","link","decipher{cr4z1fl4g}","Another challenge, just to examplify and the flag is decipher{cr4z1fl4g}","1"
+"Another Test","page","decipher{n3wfl4g}","Another challenge, just to examplify and the flag is decipher{n3wfl4g}","1"
+"Try Me","no_files","decipher{br4ndn3w}","This challenge has no associated files and the flag is decipher{br4ndn3w}","1"
 ```
 
 After that, create the folder `decipher-me/decipher/scripts/challenges_files`
@@ -143,9 +144,10 @@ and create folders with the **same titles of each one of the
 challenges**. Inside this folders, we must add the content files. If the
 `content_type` is a <b>image</b> or a <b>downloadable file</b>, you should just
 drop it inside the folder. If it's a <b>link</b>, you should add a `.txt` file
-containing the link. Finally, if it's a <b>page</b>, you should add the `.html`
+containing the link. If it's a <b>page</b>, you should add the `.html`
 file (and others that may be necessary, like `.js` files). The name of these
-files doesn't matter to us, it can be whatever you want.
+files doesn't matter to us, it can be whatever you want. Finally, if the
+`content type` is <b>no_files</b>, just don't create the folder.
 
 After adding all the challenges, navigate to the folder
 `decipher-me/decipher` and run the following commands:
