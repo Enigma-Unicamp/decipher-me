@@ -160,6 +160,14 @@ $ ./manage.py shell < scripts/create_challenges.py
 $ ./manage.py runserver 0:8000
 ```
 
+### Deploying
+
+You will need to configure a web sever (e.g. `nginx`) to host your
+**Decipher-me**. We recommend
+[this](https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-16-04)
+tutorial from Digital Ocean to deploying. You can skip the step of Postgres
+since we use SQLite here.
+
 ## How to contribute
 
 Please check [this page](https://gitlab.com/enigmaster/decipher-me/blob/master/CONTRIBUTING.md).
