@@ -4,7 +4,6 @@ Decipher challenge views
 from datetime import datetime
 from hashlib import sha256
 import json
-import re
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -146,11 +145,8 @@ class ChallengeView(LoginRequiredMixin, View):
                 flag = request.POST['flag']
                 hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
 
-                # pattern to verify regex
-                pattern = re.compile("decipher{+[\x21-\x7E]+}$")
-
                 # flag is correct
-                if pattern.match(flag) and hash_flag == chall.flag:
+                if hash_flag == chall.flag:
 
                     challenges_done[chall.id_chall] = '1'
                     request.user.challenges_done = json.dumps(challenges_done)
