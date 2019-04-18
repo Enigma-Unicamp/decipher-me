@@ -5,7 +5,8 @@
 </p>
 
 Decipher Me is a free and open web framework to host Jeopardy-style Capture The
-Flag contests.
+Flag contests. The upstream code is hosted at
+[GitLab](https://gitlab.com/enigmaster/decipher-me).
 
 [![pipeline status](https://gitlab.com/enigmaster/decipher-me/badges/master/pipeline.svg)](https://gitlab.com/enigmaster/decipher-me/commits/master)
 
@@ -170,7 +171,8 @@ since we use SQLite here.
 
 ## How to contribute
 
-Please check [this page](https://gitlab.com/enigmaster/decipher-me/blob/master/CONTRIBUTING.md).
+We are glad to see that you want to help us! Please check
+[this page](https://gitlab.com/enigmaster/decipher-me/blob/master/CONTRIBUTING.md).
 
 
 ## License
