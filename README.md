@@ -20,6 +20,34 @@ range of categories, earning points for different tasks. The categories
 mostly include Web Exploitation, Cryptography, Reverse Engineering and
 Forensic. More info [here](https://ctftime.org/ctf-wtf/).
 
+## Screen captures
+
+_Click them to enlarge_
+
+- **Initial page:**
+
+<p align="center">
+        <img src=img/screen00.png height=300px>
+</p>
+
+- **Challenges page:**
+
+<p align="center">
+        <img src=img/screen01.png height=300px>
+</p>
+
+- **A challenge page:**
+
+<p align="center">
+        <img src=img/screen02.png height=300px>
+</p>
+
+- **Ranking page:**
+
+<p align="center">
+        <img src=img/screen03.png height=300px>
+</p>
+
 ## Installing
 
 ### Requirements
