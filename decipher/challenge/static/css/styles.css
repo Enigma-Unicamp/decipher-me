@@ -13,6 +13,10 @@ nav {
   background-color: transparent !important;
 }
 
+input {
+  color: black;
+}
+
 .nav-wrapper {
   background: rgba(0,0,0,0.8);
 }
