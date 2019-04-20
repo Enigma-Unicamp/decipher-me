@@ -9,7 +9,7 @@ body {
   color: rgba(0,0,0,0.8);
 }
 
-nav{
+nav {
   background-color: transparent !important;
 }
 
@@ -25,7 +25,7 @@ nav ul li:hover {
   color: rgba(255,255,255,1);
 }
 
-#nav-bottom{
+#nav-bottom {
   position: fixed;
   bottom: 0;
   height: 45px;
@@ -42,28 +42,28 @@ nav ul li:hover {
   text-decoration: none;
 }
 
-.success-message{
+.success-message {
   color: rgba(82,187,37,0.8);
   font-weight: bold;
   font-size: small;
 }
 
-.error-message{
+.error-message {
   color: rgba(255,0,0,0.8);
   font-weight: bold;
   font-size: small;
 }
 
-.chall-description{
+.chall-description {
   color: rgba(0,0,0,0.7);
 }
 
-.chall-points-solved-by{
+.chall-points-solved-by {
   font-size:small;
   font-weight:bold;
 }
 
-.home-image{
+.home-image {
   width: 15%;
   height: 15%;
   margin-top: 30pt;
@@ -73,18 +73,18 @@ nav ul li:hover {
   margin-right: auto;
 }
 
-.divider{
+.divider {
   margin-top: 0px !important;
 }
 
-.chall-name{
+.chall-name {
   text-overflow: ellipsis;
   overflow: hidden;
   width: 250px;
   display: inline-block;
 }
 
-.chall-points{
+.chall-points {
   margin-top:10px;
   margin-left:40px;
   font-size:small;
@@ -92,7 +92,7 @@ nav ul li:hover {
   color:rgba(0,0,0,0.7);
 }
 
-.chall-solved-by{
+.chall-solved-by {
   margin-bottom:30px;
   margin-left:40px;
   font-size:small;
