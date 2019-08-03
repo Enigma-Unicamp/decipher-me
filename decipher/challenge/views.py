@@ -28,6 +28,12 @@ class HomeView(TemplateView):
 
     template_name = 'challenge/home.html'
 
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {
+            'message': 'Resolva desafios durante a semana para acumular pontos para o desafio final, Sexta-feira às 17h.'
+        })
+
+
 class AboutView(TemplateView):
 
     template_name = 'challenge/about.html'
