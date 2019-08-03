@@ -10,6 +10,7 @@ app_name = 'challenge'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('home/', views.HomeView.as_view(), name='home'),
+    path('about/', views.AboutView.as_view(), name='about'),
     path('challenges_page/',
          views.ChallengesPageView.as_view(),
          name='challenges_page'

@@ -28,6 +28,9 @@ class HomeView(TemplateView):
 
     template_name = 'challenge/home.html'
 
+class AboutView(TemplateView):
+
+    template_name = 'challenge/about.html'
 
 
 class ChallengesPageView(LoginRequiredMixin, View):
