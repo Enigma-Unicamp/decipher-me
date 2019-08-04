@@ -1,0 +1,39 @@
+{% extends 'challenge/base.html' %}
+
+{% block title %}
+  Login
+{% endblock %}
+
+{% block content %}
+
+  <!-- Page title -->
+  <h4 style="margin-bottom:30px">
+    Login
+  </h4>
+
+  <!-- Display successful message after user sign up -->
+  {% if message %}
+    <div class="success-message">{{ message }}</div> <br />
+  {% endif %}
+
+  <!-- Display any forms error -->
+  {% if error %}
+        <div class="error-message">{{ error }}</div> <br />
+  {% endif %}
+
+  <form action="{% url 'cookiejar:login' %}" method="post">
+
+      <!-- Login form fields -->
+      <label for="id_username" class="">Username:</label>
+      <input type="text" name="username" maxlength="150" id="id_username">
+    
+      <label for="id_password" class="">Password:</label>
+      <input type="password" name="password" maxlength="128" id="id_password">
+      
+      <!-- Buttons: confirm login -->
+      <input type="submit" value="Enter" class="btn">
+    </form>
+
+  </form>
+
+{% endblock %}
