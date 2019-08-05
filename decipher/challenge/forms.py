@@ -22,7 +22,7 @@ class ChallengeForm(forms.ModelForm):
             'flag': 'flag',
         }
         widgets = {
-            'flag': forms.TextInput(attrs={'placeholder': 'decipher{flag}'})
+            'flag': forms.TextInput(attrs={'placeholder': 'secomp{flag}'})
         }
 
 
