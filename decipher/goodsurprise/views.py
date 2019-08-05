@@ -26,7 +26,7 @@ class GoodSurpriseView(TemplateView):
         try:
             if int(request.COOKIES['id*127']) == 30*127:
                 return render(request, self.template_name, 
-                              {'message': f'Here, have a cookie: {CHALLENGE_KEY}'})
+                              {'message': 'Here, have a cookie: {}'.format(CHALLENGE_KEY)})
         except:
             pass
 
