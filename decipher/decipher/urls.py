@@ -20,7 +20,7 @@ from challenge.views import IndexView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('challenge/', include('challenge.urls', namespace='challenge')),
-    path('cookiejar/', include('cookiejar.urls', namespace='cookiejar')),
+    path('goodsurprise/', include('goodsurprise.urls', namespace='goodsurprise')),
     path('challenge/', include('django.contrib.auth.urls')),
     path('',  IndexView.as_view(), name='index'),
 ]
