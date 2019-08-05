@@ -19,11 +19,15 @@ class GoodSurpriseView(TemplateView):
 
     def render_to_response(self, context, **response_kwargs):
         response = super().render_to_response(context, **response_kwargs)
-        response.set_cookie('admin', False)
+        response.set_cookie('id*127', 0)
         return response
 
     def post(self, request):
-        if request.COOKIES['admin'].lower() == 'true':
-            return render(request, self.template_name, {'message': f'Here, have a cookie: {CHALLENGE_KEY}'})
+        try:
+            if int(request.COOKIES['id*127']) == 30*127:
+                return render(request, self.template_name, 
+                              {'message': f'Here, have a cookie: {CHALLENGE_KEY}'})
+        except:
+            pass
 
         return render(request, self.template_name, {'error': 'Invalid username or password'}, status=403)
