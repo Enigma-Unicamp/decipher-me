@@ -16,6 +16,7 @@ urlpatterns = [
          name='challenges_page'
         ),
     path('challenge/', views.ChallengeView.as_view(), name='challenge'),
+    path('riddle/', views.RiddleView.as_view(), name='riddle'),
     path('rules/', views.RulesView.as_view(), name='rules'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('ranking/', views.RankingView.as_view(), name='ranking'),

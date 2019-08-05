@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
 
-from .models import User, Challenge
+from .models import User, Challenge, Riddle
 from . import forms
 
 class IndexView(TemplateView):
@@ -47,7 +47,8 @@ class ChallengesPageView(LoginRequiredMixin, View):
 
         # if authenticated, pass the challenges to the template
         if request.user.is_authenticated:
-            challs = list(Challenge.objects.all().values())
+            challs  = list(Challenge.objects.all().values())
+            riddles = list(Riddle.objects.all().values())
 
             # concatenate challenge info with field that
             # says if user has unlocked or not the challenge
@@ -100,6 +101,7 @@ class ChallengesPageView(LoginRequiredMixin, View):
             return render(
                 request, self.template_name,
                 {'challenges' : challs,
+                 'riddles' : riddles,
                  'sequential' : settings.SEQUENTIAL_CHALLENGES}
             )
 
@@ -197,6 +199,54 @@ class ChallengeView(LoginRequiredMixin, View):
             request, self.template_name,
             {'error_message' : error_message, 'link' : link,
              'challenge': chall, 'form' : form}
+        )
+
+
+
+class RiddleView(LoginRequiredMixin, View):
+
+    template_name = 'challenge/riddle.html'
+    form_class = forms.RiddleForm
+
+    def post(self, request):
+
+        form = self.form_class(request.POST)
+
+        riddle = get_object_or_404(
+            Riddle,
+            id_riddle=request.POST['id_riddle']
+        )
+
+        error_message = ""
+
+        # user isn't allowed to check this riddle
+        if riddle.visible == False:
+            return redirect('challenge:index')
+
+        # check if it's a flag submission
+        if "flag" in request.POST.keys():
+
+            # now let's check if the flag is correct
+            flag = request.POST['flag']
+            hash_flag = sha256(bytes(flag, 'utf-8')).hexdigest()
+
+            # check if flag is correct or not
+            wrong_flag = False
+            if hash_flag != riddle.flag:
+                wrong_flag = True
+
+            # show error or riddle hint
+            if wrong_flag:
+                error_message = "Wrong flag :("
+            else:
+                error_message = riddle.hint
+
+
+        # render the challenge page
+        return render(
+            request, self.template_name,
+            {'error_message' : error_message, 
+             'riddle': riddle, 'form' : form}
         )
 
 
