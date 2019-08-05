@@ -30,4 +30,5 @@ class GoodSurpriseView(TemplateView):
         except:
             pass
 
-        return render(request, self.template_name, {'error': 'Invalid username or password'}, status=403)
+        return render(request, self.template_name, {'error': 'Invalid username or password'},
+                      status=403)
