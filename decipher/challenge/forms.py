@@ -5,7 +5,7 @@ Decipher challenge forms
 from django.contrib.auth.password_validation import validate_password
 from django import forms
 
-from .models import User, Challenge
+from .models import User, Challenge, Riddle
 
 
 class ChallengeForm(forms.ModelForm):
@@ -22,9 +22,26 @@ class ChallengeForm(forms.ModelForm):
             'flag': 'flag',
         }
         widgets = {
-            'flag': forms.TextInput(attrs={'placeholder': 'decipher{flag}'})
+            'flag': forms.TextInput(attrs={'placeholder': 'secomp{flag}'})
         }
 
+
+class RiddleForm(forms.ModelForm):
+
+    class Meta:
+        model = Riddle
+        fields = [
+            'flag',
+        ]
+        help_texts = {
+            'flag': 'flag',
+        }
+        labels = {
+            'flag': 'flag',
+        }
+        widgets = {
+            'flag': forms.TextInput(attrs={'placeholder': 'secomp{flag}'})
+        }
 
 
 class LoginForm(forms.Form):

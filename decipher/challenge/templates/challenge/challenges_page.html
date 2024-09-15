@@ -2,16 +2,16 @@
 {% load static %}
 
 {% block title %}
-  Challenges
+  Challenges and Riddles
 {% endblock %}
 
 {% block content %}
 
     {% if request.user.is_authenticated %}
 
-        <h4 style="margin-bottom:30pt">
-            Challenges
-        </h4>
+        <div style="margin-left:10px; margin-top:10px; margin-bottom:10px">
+            <h4> Challenges </h4>
+        <div>
 
         {% if challenges %}
 
@@ -100,6 +100,48 @@
 
         {% else %}
             We still don't have any challenges. Come back soon.
+        {% endif %}
+
+        <div style="margin-left:10px; margin-top:10px; margin-bottom:10px">
+            <h4> Riddles </h4>
+        <div>
+
+
+        {% if riddles %}
+
+          <table style="table-layout:auto">
+
+            <tr>
+              <th style="text-align:left"> Name </th>
+            </tr>
+
+            {% for riddle in riddles %}
+              <tr>
+                <form action="{% url 'challenge:riddle' %}" method="post">
+
+                    {% csrf_token %}
+
+                   {% if riddle.visible == True %}
+                      <td style="text-align:left; overflow:hidden">
+                        <i class="material-icons" style="vertical-align: middle"></i>
+                        <input type="submit" value="{{ riddle.title }}" class="btn chall-name">
+                      </td>
+                    {% else %}
+                      <td style="text-align:left; overflow:hidden">
+                        <i class="material-icons" style="vertical-align: middle"></i>
+                        <input type="submit" value="{{ riddle.title }}" class="btn chall-name" disabled>
+                      </td>
+                    {% endif %}
+
+                    <input name="id_riddle" type="hidden" value="{{ riddle.id_riddle }}">
+
+                </form>
+
+              </tr>
+            {% endfor %}
+
+          </table>
+
         {% endif %}
 
     {% endif %}

@@ -32,3 +32,13 @@ class Challenge(models.Model):
     points = models.PositiveIntegerField(default=0)
     flag = models.CharField(max_length=200)
     solved_by = models.PositiveIntegerField(default=0)
+
+
+# Riddles model
+class Riddle(models.Model):
+    id_riddle = models.PositiveIntegerField(primary_key=True, unique=True)
+    title = models.CharField(max_length=200, unique=True)
+    description = models.TextField()
+    hint = models.TextField()
+    flag = models.CharField(max_length=200)
+    visible = models.BooleanField()
